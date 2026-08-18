@@ -76,9 +76,29 @@ class Program
         var data = args.Reading;
         var info = $"{data.Activity:F3}";
         PrintAt(
-            TABLE_LEFT + TABLE_CELL_WIDTH,
+            TABLE_LEFT + 1 * TABLE_CELL_WIDTH,
             TABLE_TOP,
             "Activity", info.PadRight(15));
+    }
+
+    private static void Compass_ReadingChanged(Compass sender, CompassReadingChangedEventArgs args)
+    {
+        var data = args.Reading;
+        var info = $"{data.HeadingTrueNorth:F3}°";
+        PrintAt(
+            TABLE_LEFT + 2 * TABLE_CELL_WIDTH,
+            TABLE_TOP,
+            "Compass", info.PadRight(15));
+    }
+
+    private static void HingeAngle_ReadingChanged(HingeAngleSensor sender, HingeAngleSensorReadingChangedEventArgs args)
+    {
+        var data = args.Reading;
+        var info = $"{data.AngleInDegrees:F3}°";
+        PrintAt(
+            TABLE_LEFT + 3 * TABLE_CELL_WIDTH,
+            TABLE_TOP,
+            "Hinge Angle", info.PadRight(15));
     }
 
     private static void Accelerometer_ReadingChanged(Accelerometer sender, AccelerometerReadingChangedEventArgs args)
@@ -98,7 +118,7 @@ class Program
         PrintAt(
             TABLE_LEFT,
             TABLE_TOP + 2 * TABLE_CELL_HEIGHT,
-            "Gyrometer", info.PadRight(45));
+            "Gyrometer", info.PadRight(50));
     }
 
     private static void Inclinometer_ReadingChanged(Inclinometer sender, InclinometerReadingChangedEventArgs args)
@@ -121,64 +141,24 @@ class Program
             "Orientation", info.PadRight(45));
     }
 
-    private static void Altimeter_ReadingChanged(Altimeter sender, AltimeterReadingChangedEventArgs args)
+    private static void Magnetometer_ReadingChanged(Magnetometer sender, MagnetometerReadingChangedEventArgs args)
     {
         var data = args.Reading;
-        var info = $"{data.AltitudeChangeInMeters:F3} m";
+        var info = $"X = {data.MagneticFieldX:F3}, Y = {data.MagneticFieldY:F3}, Z = {data.MagneticFieldZ:F3}";
         PrintAt(
             TABLE_LEFT,
             TABLE_TOP + 5 * TABLE_CELL_HEIGHT,
-            "Altimeter", info.PadRight(15));
+            "Magnetometer", info.PadRight(45));
     }
 
-    private static void Barometer_ReadingChanged(Barometer sender, BarometerReadingChangedEventArgs args)
+    private static void Pedometer_ReadingChanged(Pedometer sender, PedometerReadingChangedEventArgs args)
     {
         var data = args.Reading;
-        var info = $"{data.StationPressureInHectopascals:F3} hPa";
-        PrintAt(
-            TABLE_LEFT + 1 * TABLE_CELL_WIDTH,
-            TABLE_TOP + 5 * TABLE_CELL_HEIGHT,
-            "Barometer", info.PadRight(15));
-    }
-
-    private static void Compass_ReadingChanged(Compass sender, CompassReadingChangedEventArgs args)
-    {
-        var data = args.Reading;
-        var info = $"{data.HeadingTrueNorth:F3}°";
-        PrintAt(
-            TABLE_LEFT + 2 * TABLE_CELL_WIDTH,
-            TABLE_TOP + 5 * TABLE_CELL_HEIGHT,
-            "Compass", info.PadRight(15));
-    }
-
-    private static void HingeAngle_ReadingChanged(HingeAngleSensor sender, HingeAngleSensorReadingChangedEventArgs args)
-    {
-        var data = args.Reading;
-        var info = $"{data.AngleInDegrees:F3}°";
+        var info = $"{data.CumulativeStepsDuration}: {data.CumulativeSteps} ({data.StepKind})";
         PrintAt(
             TABLE_LEFT,
             TABLE_TOP + 6 * TABLE_CELL_HEIGHT,
-            "Hinge Angle", info.PadRight(15));
-    }
-
-    private static void Light_ReadingChanged(LightSensor sender, LightSensorReadingChangedEventArgs args)
-    {
-        var data = args.Reading;
-        var info = $"{data.IlluminanceInLux:F3}°";
-        PrintAt(
-            TABLE_LEFT + 1 * TABLE_CELL_WIDTH,
-            TABLE_TOP + 6 * TABLE_CELL_HEIGHT,
-            "Hinge Angle", info.PadRight(15));
-    }
-
-    private static void Proximity_ReadingChanged(ProximitySensor sender, ProximitySensorReadingChangedEventArgs args)
-    {
-        var data = args.Reading;
-        var info = data.IsDetected ? $"{data.DistanceInMillimeters:F3} mm" : "-";
-        PrintAt(
-            TABLE_LEFT + 2 * TABLE_CELL_WIDTH,
-            TABLE_TOP + 6 * TABLE_CELL_HEIGHT,
-            "Proximity", info.PadRight(15));
+            "Pedometer", info.PadRight(45));
     }
 
     private static void HumanPresence_ReadingChanged(HumanPresenceSensor sender, HumanPresenceSensorReadingChangedEventArgs args)
@@ -191,24 +171,44 @@ class Program
             "Human Presence", info.PadRight(45));
     }
 
-    private static void Magnetometer_ReadingChanged(Magnetometer sender, MagnetometerReadingChangedEventArgs args)
+    private static void Altimeter_ReadingChanged(Altimeter sender, AltimeterReadingChangedEventArgs args)
     {
         var data = args.Reading;
-        var info = $"X = {data.MagneticFieldX:F3}, Y = {data.MagneticFieldY:F3}, Z = {data.MagneticFieldZ:F3}";
+        var info = $"{data.AltitudeChangeInMeters:F3} m";
         PrintAt(
             TABLE_LEFT,
             TABLE_TOP + 8 * TABLE_CELL_HEIGHT,
-            "Magnetometer", info.PadRight(45));
+            "Altimeter", info.PadRight(15));
     }
 
-    private static void Pedometer_ReadingChanged(Pedometer sender, PedometerReadingChangedEventArgs args)
+    private static void Barometer_ReadingChanged(Barometer sender, BarometerReadingChangedEventArgs args)
     {
         var data = args.Reading;
-        var info = $"{data.CumulativeStepsDuration}: {data.CumulativeSteps} ({data.StepKind})";
+        var info = $"{data.StationPressureInHectopascals:F3} hPa";
         PrintAt(
-            TABLE_LEFT,
-            TABLE_TOP + 9 * TABLE_CELL_HEIGHT,
-            "Pedometer", info.PadRight(45));
+            TABLE_LEFT + 1 * TABLE_CELL_WIDTH,
+            TABLE_TOP + 8 * TABLE_CELL_HEIGHT,
+            "Barometer", info.PadRight(15));
+    }
+
+    private static void Light_ReadingChanged(LightSensor sender, LightSensorReadingChangedEventArgs args)
+    {
+        var data = args.Reading;
+        var info = $"{data.IlluminanceInLux:F3}°";
+        PrintAt(
+            TABLE_LEFT + 2 * TABLE_CELL_WIDTH,
+            TABLE_TOP + 8 * TABLE_CELL_HEIGHT,
+            "Hinge Angle", info.PadRight(15));
+    }
+
+    private static void Proximity_ReadingChanged(ProximitySensor sender, ProximitySensorReadingChangedEventArgs args)
+    {
+        var data = args.Reading;
+        var info = data.IsDetected ? $"{data.DistanceInMillimeters:F3} mm" : "-";
+        PrintAt(
+            TABLE_LEFT + 3 * TABLE_CELL_WIDTH,
+            TABLE_TOP + 8 * TABLE_CELL_HEIGHT,
+            "Proximity", info.PadRight(15));
     }
 
     private static void PrintAt<T>(int left, int top, string name, IAsyncOperation<T> task, Func<T, string> toString)
