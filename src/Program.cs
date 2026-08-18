@@ -136,7 +136,7 @@ class Program
         var data = args.Reading;
         var info = $"{data.StationPressureInHectopascals:F3} hPa";
         PrintAt(
-            TABLE_LEFT + TABLE_CELL_WIDTH,
+            TABLE_LEFT + 1 * TABLE_CELL_WIDTH,
             TABLE_TOP + 5 * TABLE_CELL_HEIGHT,
             "Barometer", info.PadRight(15));
     }
@@ -229,7 +229,7 @@ class Program
 
         Console.CursorLeft = left;
         Console.CursorTop = top;
-        Console.Write(name);
+        Console.Write($"{name}:");
         Console.CursorLeft = left;
         Console.CursorTop = top + 1;
         Console.Write(info);
