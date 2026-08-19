@@ -7,7 +7,8 @@ class Program
 {
     const int TABLE_LEFT = 30;
     const int TABLE_TOP = 1;
-    const int TABLE_CELL_WIDTH = 15;
+    const int TABLE_CELL_WIDTH_SHORT = 15;
+    const int TABLE_CELL_WIDTH_LONG = 50;
     const int TABLE_CELL_HEIGHT = 3;
 
     readonly static Lock _locker = new();
@@ -25,7 +26,11 @@ class Program
         if (provider.Activity != null)
         {
             provider.Activity.ReadingChanged += Activity_ReadingChanged;
-            PrintAt(TABLE_LEFT + TABLE_CELL_WIDTH, TABLE_TOP, "Activity", provider.Activity.GetCurrentReadingAsync(), data => $"{data.Activity}");
+            PrintAt(TABLE_LEFT + TABLE_CELL_WIDTH_SHORT,
+                TABLE_TOP,
+                "Activity",
+                provider.Activity.GetCurrentReadingAsync(),
+                data => $"{data.Activity}");
         }
         if (provider.Accelerometer != null)
             provider.Accelerometer.ReadingChanged += Accelerometer_ReadingChanged;
@@ -60,6 +65,7 @@ class Program
         Console.ReadLine();
 
         Console.CursorTop = top;
+        Console.CursorVisible = true;
     }
 
     private static void SimpleOrientation_OrientationChanged(SimpleOrientationSensor sender, SimpleOrientationSensorOrientationChangedEventArgs args)
@@ -68,7 +74,7 @@ class Program
         var info = $"{data}";
         PrintAt(
             TABLE_LEFT,
-            TABLE_TOP, "Mode", info.PadRight(15));
+            TABLE_TOP, "Mode", info.PadRight(TABLE_CELL_WIDTH_SHORT));
     }
 
     private static void Activity_ReadingChanged(ActivitySensor sender, ActivitySensorReadingChangedEventArgs args)
@@ -76,9 +82,9 @@ class Program
         var data = args.Reading;
         var info = $"{data.Activity:F3}";
         PrintAt(
-            TABLE_LEFT + 1 * TABLE_CELL_WIDTH,
+            TABLE_LEFT + 1 * TABLE_CELL_WIDTH_SHORT,
             TABLE_TOP,
-            "Activity", info.PadRight(15));
+            "Activity", info.PadRight(TABLE_CELL_WIDTH_SHORT));
     }
 
     private static void Compass_ReadingChanged(Compass sender, CompassReadingChangedEventArgs args)
@@ -86,9 +92,9 @@ class Program
         var data = args.Reading;
         var info = $"{data.HeadingTrueNorth:F3}°";
         PrintAt(
-            TABLE_LEFT + 2 * TABLE_CELL_WIDTH,
+            TABLE_LEFT + 2 * TABLE_CELL_WIDTH_SHORT,
             TABLE_TOP,
-            "Compass", info.PadRight(15));
+            "Compass", info.PadRight(TABLE_CELL_WIDTH_SHORT));
     }
 
     private static void HingeAngle_ReadingChanged(HingeAngleSensor sender, HingeAngleSensorReadingChangedEventArgs args)
@@ -96,9 +102,9 @@ class Program
         var data = args.Reading;
         var info = $"{data.AngleInDegrees:F3}°";
         PrintAt(
-            TABLE_LEFT + 3 * TABLE_CELL_WIDTH,
+            TABLE_LEFT + 3 * TABLE_CELL_WIDTH_SHORT,
             TABLE_TOP,
-            "Hinge Angle", info.PadRight(15));
+            "Hinge Angle", info.PadRight(TABLE_CELL_WIDTH_SHORT));
     }
 
     private static void Accelerometer_ReadingChanged(Accelerometer sender, AccelerometerReadingChangedEventArgs args)
@@ -108,7 +114,7 @@ class Program
         PrintAt(
             TABLE_LEFT,
             TABLE_TOP + 1 * TABLE_CELL_HEIGHT,
-            "Accelerometer", info.PadRight(40));
+            "Accelerometer", info.PadRight(TABLE_CELL_WIDTH_LONG));
     }
 
     private static void Gyrometer_ReadingChanged(Gyrometer sender, GyrometerReadingChangedEventArgs args)
@@ -118,7 +124,7 @@ class Program
         PrintAt(
             TABLE_LEFT,
             TABLE_TOP + 2 * TABLE_CELL_HEIGHT,
-            "Gyrometer", info.PadRight(50));
+            "Gyrometer", info.PadRight(TABLE_CELL_WIDTH_LONG));
     }
 
     private static void Inclinometer_ReadingChanged(Inclinometer sender, InclinometerReadingChangedEventArgs args)
@@ -128,7 +134,7 @@ class Program
         PrintAt(
             TABLE_LEFT,
             TABLE_TOP + 3 * TABLE_CELL_HEIGHT,
-            "Inclinometer", info.PadRight(40));
+            "Inclinometer", info.PadRight(TABLE_CELL_WIDTH_LONG));
     }
 
     private static void Orientation_ReadingChanged(OrientationSensor sender, OrientationSensorReadingChangedEventArgs args)
@@ -138,7 +144,7 @@ class Program
         PrintAt(
             TABLE_LEFT,
             TABLE_TOP + 4 * TABLE_CELL_HEIGHT,
-            "Orientation", info.PadRight(45));
+            "Orientation", info.PadRight(TABLE_CELL_WIDTH_LONG));
     }
 
     private static void Magnetometer_ReadingChanged(Magnetometer sender, MagnetometerReadingChangedEventArgs args)
@@ -148,7 +154,7 @@ class Program
         PrintAt(
             TABLE_LEFT,
             TABLE_TOP + 5 * TABLE_CELL_HEIGHT,
-            "Magnetometer", info.PadRight(45));
+            "Magnetometer", info.PadRight(TABLE_CELL_WIDTH_LONG));
     }
 
     private static void Pedometer_ReadingChanged(Pedometer sender, PedometerReadingChangedEventArgs args)
@@ -158,7 +164,7 @@ class Program
         PrintAt(
             TABLE_LEFT,
             TABLE_TOP + 6 * TABLE_CELL_HEIGHT,
-            "Pedometer", info.PadRight(45));
+            "Pedometer", info.PadRight(TABLE_CELL_WIDTH_LONG));
     }
 
     private static void HumanPresence_ReadingChanged(HumanPresenceSensor sender, HumanPresenceSensorReadingChangedEventArgs args)
@@ -168,7 +174,7 @@ class Program
         PrintAt(
             TABLE_LEFT,
             TABLE_TOP + 7 * TABLE_CELL_HEIGHT,
-            "Human Presence", info.PadRight(45));
+            "Human Presence", info.PadRight(TABLE_CELL_WIDTH_LONG));
     }
 
     private static void Altimeter_ReadingChanged(Altimeter sender, AltimeterReadingChangedEventArgs args)
@@ -178,7 +184,7 @@ class Program
         PrintAt(
             TABLE_LEFT,
             TABLE_TOP + 8 * TABLE_CELL_HEIGHT,
-            "Altimeter", info.PadRight(15));
+            "Altimeter", info.PadRight(TABLE_CELL_WIDTH_SHORT));
     }
 
     private static void Barometer_ReadingChanged(Barometer sender, BarometerReadingChangedEventArgs args)
@@ -186,9 +192,9 @@ class Program
         var data = args.Reading;
         var info = $"{data.StationPressureInHectopascals:F3} hPa";
         PrintAt(
-            TABLE_LEFT + 1 * TABLE_CELL_WIDTH,
+            TABLE_LEFT + 1 * TABLE_CELL_WIDTH_SHORT,
             TABLE_TOP + 8 * TABLE_CELL_HEIGHT,
-            "Barometer", info.PadRight(15));
+            "Barometer", info.PadRight(TABLE_CELL_WIDTH_SHORT));
     }
 
     private static void Light_ReadingChanged(LightSensor sender, LightSensorReadingChangedEventArgs args)
@@ -196,9 +202,9 @@ class Program
         var data = args.Reading;
         var info = $"{data.IlluminanceInLux:F3}°";
         PrintAt(
-            TABLE_LEFT + 2 * TABLE_CELL_WIDTH,
+            TABLE_LEFT + 2 * TABLE_CELL_WIDTH_SHORT,
             TABLE_TOP + 8 * TABLE_CELL_HEIGHT,
-            "Hinge Angle", info.PadRight(15));
+            "Hinge Angle", info.PadRight(TABLE_CELL_WIDTH_SHORT));
     }
 
     private static void Proximity_ReadingChanged(ProximitySensor sender, ProximitySensorReadingChangedEventArgs args)
@@ -206,9 +212,9 @@ class Program
         var data = args.Reading;
         var info = data.IsDetected ? $"{data.DistanceInMillimeters:F3} mm" : "-";
         PrintAt(
-            TABLE_LEFT + 3 * TABLE_CELL_WIDTH,
+            TABLE_LEFT + 3 * TABLE_CELL_WIDTH_SHORT,
             TABLE_TOP + 8 * TABLE_CELL_HEIGHT,
-            "Proximity", info.PadRight(15));
+            "Proximity", info.PadRight(TABLE_CELL_WIDTH_SHORT));
     }
 
     private static void PrintAt<T>(int left, int top, string name, IAsyncOperation<T> task, Func<T, string> toString)
@@ -221,7 +227,6 @@ class Program
 
         _locker.Exit();
     }
-
 
     private static void PrintAt(int left, int top, string name, string info)
     {

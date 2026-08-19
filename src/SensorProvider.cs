@@ -59,11 +59,13 @@ internal class SensorProvider
 
     public SensorProvider()
     {
-        T? GetSync<T>()
+        static T? GetSync<T>()
         {
             var method = typeof(T).GetMethod("GetDefaultAsync", BindingFlags.Public | BindingFlags.Static);
             if (method == null)
+            {
                 return default(T);
+            }
             try
             {
                 var task = (IAsyncOperation<T>?)method.Invoke(null, null);
