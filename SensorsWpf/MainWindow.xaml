@@ -14,7 +14,8 @@
             <Setter Property="FontSize" Value="12"/>
         </Style>
         <Style TargetType="TextBlock">
-            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="8,4"/>
         </Style>
     </Window.Resources>
     <UniformGrid Columns="1" Rows="9">
@@ -36,20 +37,20 @@
                 <TextBlock Text="{Binding HingeAngle.Info}"/>
             </StackPanel>
         </UniformGrid>
-        <StackPanel>
-            <Label Content="{Binding Accelerometer.Name}"/>
-            <TextBlock Text="{Binding Accelerometer.Info}"/>
-        </StackPanel>
         <StackPanel Orientation="Horizontal">
-            <StackPanel>
-                <Label Content="{Binding Gyrometer.Name}"/>
-                <TextBlock Text="{Binding Gyrometer.Info}"/>
+            <StackPanel Width="300">
+                <Label Content="{Binding Accelerometer.Name}"/>
+                <TextBlock Text="{Binding Accelerometer.Info}"/>
             </StackPanel>
             <Canvas Width="100">
                 <Ellipse Width="10" Height="10" Fill="Red"
                          Canvas.Left="{Binding Ball.X}"
                          Canvas.Top="{Binding Ball.Y}"/>
             </Canvas>
+        </StackPanel>
+        <StackPanel>
+            <Label Content="{Binding Gyrometer.Name}"/>
+            <TextBlock Text="{Binding Gyrometer.Info}"/>
         </StackPanel>
         <StackPanel>
             <Label Content="{Binding Inclinometer.Name}"/>

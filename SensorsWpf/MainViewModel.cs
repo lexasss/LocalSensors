@@ -106,14 +106,14 @@ internal partial class MainViewModel : ObservableObject
     {
         var data = args.Reading;
         Accelerometer.Info = $"X = {data.AccelerationX:F3} G, Y = {data.AccelerationY:F3} G, Z = {data.AccelerationZ:F3} G";
+        Ball.X = 40 + data.AccelerationX * 100;
+        Ball.Y = 40 + (data.AccelerationY + 1) * 100;
     }
 
     private void Gyrometer_ReadingChanged(Gyrometer sender, GyrometerReadingChangedEventArgs args)
     {
         var data = args.Reading;
         Gyrometer.Info = $"X = {data.AngularVelocityX:F3}°/s, Y = {data.AngularVelocityY:F3}°/s, Z = {data.AngularVelocityY:F3}°/s";
-        Ball.X = 40 + data.AngularVelocityX * 10;
-        Ball.Y = 40 + data.AngularVelocityX * 10;
     }
 
     private void Inclinometer_ReadingChanged(Inclinometer sender, InclinometerReadingChangedEventArgs args)
