@@ -1,0 +1,88 @@
+﻿<Window x:Class="SensorsWpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SensorsWpf"
+        mc:Ignorable="d"
+        Title="Sensors"
+        Height="600"
+        Width="600">
+    <Window.Resources>
+        <Style TargetType="Label">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="10"/>
+        </Style>
+    </Window.Resources>
+    <UniformGrid Columns="1" Rows="9">
+        <UniformGrid Columns="4" Rows="1">
+            <StackPanel>
+                <Label Content="{Binding SimpleOrientation.Name}"/>
+                <TextBlock Text="{Binding SimpleOrientation.Info}"/>
+            </StackPanel>
+            <StackPanel>
+                <Label Content="{Binding Activity.Name}"/>
+                <TextBlock Text="{Binding Activity.Info}"/>
+            </StackPanel>
+            <StackPanel>
+                <Label Content="{Binding Proximity.Name}"/>
+                <TextBlock Text="{Binding Proximity.Info}"/>
+            </StackPanel>
+            <StackPanel>
+                <Label Content="{Binding HingeAngle.Name}"/>
+                <TextBlock Text="{Binding HingeAngle.Info}"/>
+            </StackPanel>
+        </UniformGrid>
+        <StackPanel>
+            <Label Content="{Binding Accelerometer.Name}"/>
+            <TextBlock Text="{Binding Accelerometer.Info}"/>
+        </StackPanel>
+        <StackPanel>
+            <Label Content="{Binding Gyrometer.Name}"/>
+            <TextBlock Text="{Binding Gyrometer.Info}"/>
+        </StackPanel>
+        <StackPanel>
+            <StackPanel>
+                <Label Content="{Binding Inclinometer.Name}"/>
+                <TextBlock Text="{Binding Inclinometer.Info}"/>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel>
+            <Label Content="{Binding Orientation.Name}"/>
+            <TextBlock Text="{Binding Orientation.Info}"/>
+        </StackPanel>
+        <StackPanel>
+            <Label Content="{Binding Magnetometer.Name}"/>
+            <TextBlock Text="{Binding Magnetometer.Info}"/>
+        </StackPanel>
+        <StackPanel>
+            <Label Content="{Binding Pedometer.Name}"/>
+            <TextBlock Text="{Binding Pedometer.Info}"/>
+        </StackPanel>
+        <StackPanel>
+            <Label Content="{Binding HumanPresence.Name}"/>
+            <TextBlock Text="{Binding HumanPresence.Info}"/>
+        </StackPanel>
+        <UniformGrid Columns="4" Rows="1">
+            <StackPanel>
+                <Label Content="{Binding Altimeter.Name}"/>
+                <TextBlock Text="{Binding Altimeter.Info}"/>
+            </StackPanel>
+            <StackPanel>
+                <Label Content="{Binding Barometer.Name}"/>
+                <TextBlock Text="{Binding Barometer.Info}"/>
+            </StackPanel>
+            <StackPanel>
+                <Label Content="{Binding Compass.Name}"/>
+                <TextBlock Text="{Binding Compass.Info}"/>
+            </StackPanel>
+            <StackPanel>
+                <Label Content="{Binding Light.Name}"/>
+                <TextBlock Text="{Binding Light.Info}"/>
+            </StackPanel>
+        </UniformGrid>
+    </UniformGrid>
+</Window>
