@@ -12,6 +12,14 @@ internal partial class SensorData(string name, string info = "") : ObservableObj
     public partial string Info { get; set; } = info;
 }
 
+internal partial class Point(double x = 0, double y = 0) : ObservableObject
+{
+    [ObservableProperty]
+    public partial double X { get; set; } = x;
+    [ObservableProperty]
+    public partial double Y { get; set; } = y;
+}
+
 internal partial class MainViewModel : ObservableObject
 {
     public SensorData Activity { get; } = new("Activity");
@@ -29,6 +37,8 @@ internal partial class MainViewModel : ObservableObject
     public SensorData Pedometer { get; } = new("Pedometer");
     public SensorData Proximity { get; } = new("Proximity");
     public SensorData SimpleOrientation { get; } = new("Mode");
+
+    public Point Ball { get; } = new Point();
 
     public MainViewModel()
     {
@@ -102,6 +112,8 @@ internal partial class MainViewModel : ObservableObject
     {
         var data = args.Reading;
         Gyrometer.Info = $"X = {data.AngularVelocityX:F3}°/s, Y = {data.AngularVelocityY:F3}°/s, Z = {data.AngularVelocityY:F3}°/s";
+        Ball.X = 40 + data.AngularVelocityX * 10;
+        Ball.Y = 40 + data.AngularVelocityX * 10;
     }
 
     private void Inclinometer_ReadingChanged(Inclinometer sender, InclinometerReadingChangedEventArgs args)
