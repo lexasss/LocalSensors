@@ -1,18 +1,9 @@
 ﻿using Windows.Devices.Sensors;
-using Windows.Foundation;
 
 namespace Sensors;
 
 class Program
 {
-    const int TABLE_LEFT = 30;
-    const int TABLE_TOP = 1;
-    const int TABLE_CELL_WIDTH_SHORT = 15;
-    const int TABLE_CELL_WIDTH_LONG = 50;
-    const int TABLE_CELL_HEIGHT = 3;
-
-    readonly static Lock _locker = new();
-
     static async Task Main()
     {
         var provider = new SensorProvider();
@@ -26,11 +17,11 @@ class Program
         if (provider.Activity != null)
         {
             provider.Activity.ReadingChanged += Activity_ReadingChanged;
-            PrintAt(TABLE_LEFT + TABLE_CELL_WIDTH_SHORT,
-                TABLE_TOP,
+            Printer.Print(
                 "Activity",
                 provider.Activity.GetCurrentReadingAsync(),
-                data => $"{data.Activity}");
+                data => $"{data.Activity}",
+                1, 0);
         }
         if (provider.Accelerometer != null)
             provider.Accelerometer.ReadingChanged += Accelerometer_ReadingChanged;
@@ -72,173 +63,104 @@ class Program
     {
         var data = args.Orientation;
         var info = $"{data}";
-        PrintAt(
-            TABLE_LEFT,
-            TABLE_TOP, "Mode", info.PadRight(TABLE_CELL_WIDTH_SHORT));
+        Printer.Print("Mode", info, 0, 0);
     }
 
     private static void Activity_ReadingChanged(ActivitySensor sender, ActivitySensorReadingChangedEventArgs args)
     {
         var data = args.Reading;
         var info = $"{data.Activity:F3}";
-        PrintAt(
-            TABLE_LEFT + 1 * TABLE_CELL_WIDTH_SHORT,
-            TABLE_TOP,
-            "Activity", info.PadRight(TABLE_CELL_WIDTH_SHORT));
+        Printer.Print("Activity", info, 1, 0);
     }
 
     private static void Compass_ReadingChanged(Compass sender, CompassReadingChangedEventArgs args)
     {
         var data = args.Reading;
         var info = $"{data.HeadingTrueNorth:F3}°";
-        PrintAt(
-            TABLE_LEFT + 2 * TABLE_CELL_WIDTH_SHORT,
-            TABLE_TOP,
-            "Compass", info.PadRight(TABLE_CELL_WIDTH_SHORT));
+        Printer.Print("Compass", info, 2, 0);
     }
 
     private static void HingeAngle_ReadingChanged(HingeAngleSensor sender, HingeAngleSensorReadingChangedEventArgs args)
     {
         var data = args.Reading;
         var info = $"{data.AngleInDegrees:F3}°";
-        PrintAt(
-            TABLE_LEFT + 3 * TABLE_CELL_WIDTH_SHORT,
-            TABLE_TOP,
-            "Hinge Angle", info.PadRight(TABLE_CELL_WIDTH_SHORT));
+        Printer.Print("Hinge Angle", info, 3, 0);
     }
 
     private static void Accelerometer_ReadingChanged(Accelerometer sender, AccelerometerReadingChangedEventArgs args)
     {
         var data = args.Reading;
         var info = $"X = {data.AccelerationX:F3} G, Y = {data.AccelerationY:F3} G, Z = {data.AccelerationZ:F3} G";
-        PrintAt(
-            TABLE_LEFT,
-            TABLE_TOP + 1 * TABLE_CELL_HEIGHT,
-            "Accelerometer", info.PadRight(TABLE_CELL_WIDTH_LONG));
+        Printer.Print("Accelerometer", info, 1);
     }
 
     private static void Gyrometer_ReadingChanged(Gyrometer sender, GyrometerReadingChangedEventArgs args)
     {
         var data = args.Reading;
         var info = $"X = {data.AngularVelocityX:F3}°/s, Y = {data.AngularVelocityY:F3}°/s, Z = {data.AngularVelocityY:F3}°/s";
-        PrintAt(
-            TABLE_LEFT,
-            TABLE_TOP + 2 * TABLE_CELL_HEIGHT,
-            "Gyrometer", info.PadRight(TABLE_CELL_WIDTH_LONG));
+        Printer.Print("Gyrometer", info, 2);
     }
 
     private static void Inclinometer_ReadingChanged(Inclinometer sender, InclinometerReadingChangedEventArgs args)
     {
         var data = args.Reading;
         var info = $"P = {data.PitchDegrees:F3}°, R = {data.RollDegrees:F3}°, Y = {data.YawDegrees:F3}°";
-        PrintAt(
-            TABLE_LEFT,
-            TABLE_TOP + 3 * TABLE_CELL_HEIGHT,
-            "Inclinometer", info.PadRight(TABLE_CELL_WIDTH_LONG));
+        Printer.Print("Inclinometer", info, 3);
     }
 
     private static void Orientation_ReadingChanged(OrientationSensor sender, OrientationSensorReadingChangedEventArgs args)
     {
         var data = args.Reading;
         var info = $"W = {data.Quaternion.W:F3}, X = {data.Quaternion.X:F3}, Y = {data.Quaternion.Y:F3}, Z = {data.Quaternion.Z:F3}";
-        PrintAt(
-            TABLE_LEFT,
-            TABLE_TOP + 4 * TABLE_CELL_HEIGHT,
-            "Orientation", info.PadRight(TABLE_CELL_WIDTH_LONG));
+        Printer.Print("Orientation", info, 4);
     }
 
     private static void Magnetometer_ReadingChanged(Magnetometer sender, MagnetometerReadingChangedEventArgs args)
     {
         var data = args.Reading;
         var info = $"X = {data.MagneticFieldX:F3}, Y = {data.MagneticFieldY:F3}, Z = {data.MagneticFieldZ:F3}";
-        PrintAt(
-            TABLE_LEFT,
-            TABLE_TOP + 5 * TABLE_CELL_HEIGHT,
-            "Magnetometer", info.PadRight(TABLE_CELL_WIDTH_LONG));
+        Printer.Print("Magnetometer", info, 5);
     }
 
     private static void Pedometer_ReadingChanged(Pedometer sender, PedometerReadingChangedEventArgs args)
     {
         var data = args.Reading;
         var info = $"{data.CumulativeStepsDuration}: {data.CumulativeSteps} ({data.StepKind})";
-        PrintAt(
-            TABLE_LEFT,
-            TABLE_TOP + 6 * TABLE_CELL_HEIGHT,
-            "Pedometer", info.PadRight(TABLE_CELL_WIDTH_LONG));
+        Printer.Print("Pedometer", info, 6);
     }
 
     private static void HumanPresence_ReadingChanged(HumanPresenceSensor sender, HumanPresenceSensorReadingChangedEventArgs args)
     {
         var data = args.Reading;
         var info = $"{data.Engagement}: {data.Presence} at {data.DistanceInMillimeters} mm";
-        PrintAt(
-            TABLE_LEFT,
-            TABLE_TOP + 7 * TABLE_CELL_HEIGHT,
-            "Human Presence", info.PadRight(TABLE_CELL_WIDTH_LONG));
+        Printer.Print("Human Presence", info, 7);
     }
 
     private static void Altimeter_ReadingChanged(Altimeter sender, AltimeterReadingChangedEventArgs args)
     {
         var data = args.Reading;
         var info = $"{data.AltitudeChangeInMeters:F3} m";
-        PrintAt(
-            TABLE_LEFT,
-            TABLE_TOP + 8 * TABLE_CELL_HEIGHT,
-            "Altimeter", info.PadRight(TABLE_CELL_WIDTH_SHORT));
+        Printer.Print("Altimeter", info, 0, 8);
     }
 
     private static void Barometer_ReadingChanged(Barometer sender, BarometerReadingChangedEventArgs args)
     {
         var data = args.Reading;
         var info = $"{data.StationPressureInHectopascals:F3} hPa";
-        PrintAt(
-            TABLE_LEFT + 1 * TABLE_CELL_WIDTH_SHORT,
-            TABLE_TOP + 8 * TABLE_CELL_HEIGHT,
-            "Barometer", info.PadRight(TABLE_CELL_WIDTH_SHORT));
+        Printer.Print("Barometer", info, 1, 8);
     }
 
     private static void Light_ReadingChanged(LightSensor sender, LightSensorReadingChangedEventArgs args)
     {
         var data = args.Reading;
         var info = $"{data.IlluminanceInLux:F3}°";
-        PrintAt(
-            TABLE_LEFT + 2 * TABLE_CELL_WIDTH_SHORT,
-            TABLE_TOP + 8 * TABLE_CELL_HEIGHT,
-            "Hinge Angle", info.PadRight(TABLE_CELL_WIDTH_SHORT));
+        Printer.Print("Light", info, 2, 8);
     }
 
     private static void Proximity_ReadingChanged(ProximitySensor sender, ProximitySensorReadingChangedEventArgs args)
     {
         var data = args.Reading;
         var info = data.IsDetected ? $"{data.DistanceInMillimeters:F3} mm" : "-";
-        PrintAt(
-            TABLE_LEFT + 3 * TABLE_CELL_WIDTH_SHORT,
-            TABLE_TOP + 8 * TABLE_CELL_HEIGHT,
-            "Proximity", info.PadRight(TABLE_CELL_WIDTH_SHORT));
-    }
-
-    private static void PrintAt<T>(int left, int top, string name, IAsyncOperation<T> task, Func<T, string> toString)
-    {
-        _locker.Enter();
-
-        task.Wait();
-        var info = toString.Invoke(task.GetResults());
-        PrintAt(left, top, name, info.PadRight(15));
-
-        _locker.Exit();
-    }
-
-    private static void PrintAt(int left, int top, string name, string info)
-    {
-        _locker.Enter();
-
-        Console.CursorLeft = left;
-        Console.CursorTop = top;
-        Console.Write($"{name}:");
-        Console.CursorLeft = left;
-        Console.CursorTop = top + 1;
-        Console.Write(info);
-
-        _locker.Exit();
+        Printer.Print("Proximity", info, 3, 8);
     }
 }
