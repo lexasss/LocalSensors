@@ -68,34 +68,47 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <UniformGrid Grid.Column="0" Columns="2" Rows="7" Width="300">
-                <UserControl ContentTemplate="{StaticResource Sensor}" 
+            <Grid Grid.Column="0" Width="300">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="20"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <UserControl ContentTemplate="{StaticResource Sensor}" Grid.Column="0" Grid.Row="0"
                              Content="{Binding Accelerometer}"/>
-                <RadioButton GroupName="Ball"
+                <RadioButton GroupName="Ball" Grid.Column="1" Grid.Row="0"
                              IsChecked="{Binding BallDataSource, Converter={StaticResource ballDatgaSource}, ConverterParameter={x:Static local:BallDataSource.Accelerometer}}"/>
-                <UserControl ContentTemplate="{StaticResource Sensor}" 
+                <UserControl ContentTemplate="{StaticResource Sensor}" Grid.Column="0" Grid.Row="1"
                              Content="{Binding Gyrometer}"/>
-                <RadioButton GroupName="Ball"
+                <RadioButton GroupName="Ball" Grid.Column="1" Grid.Row="1"
                              IsChecked="{Binding BallDataSource, Converter={StaticResource ballDatgaSource}, ConverterParameter={x:Static local:BallDataSource.Gyrometer}}"/>
-                <UserControl ContentTemplate="{StaticResource Sensor}" 
+                <UserControl ContentTemplate="{StaticResource Sensor}" Grid.Column="0" Grid.Row="2" 
                              Content="{Binding Inclinometer}"/>
-                <RadioButton GroupName="Ball"
+                <RadioButton GroupName="Ball" Grid.Column="1" Grid.Row="2"
                              IsChecked="{Binding BallDataSource, Converter={StaticResource ballDatgaSource}, ConverterParameter={x:Static local:BallDataSource.Inclinometer}}"/>
-                <UserControl ContentTemplate="{StaticResource Sensor}" 
+                <UserControl ContentTemplate="{StaticResource Sensor}" Grid.Column="0" Grid.Row="3"
                              Content="{Binding Orientation}"/>
-                <RadioButton GroupName="Ball"
+                <RadioButton GroupName="Ball" Grid.Column="1" Grid.Row="3"
                              IsChecked="{Binding BallDataSource, Converter={StaticResource ballDatgaSource}, ConverterParameter={x:Static local:BallDataSource.Orientation}}"/>
-                <UserControl ContentTemplate="{StaticResource Sensor}" 
+                <UserControl ContentTemplate="{StaticResource Sensor}" Grid.Column="0" Grid.Row="4" 
                              Content="{Binding Magnetometer}"/>
-                <RadioButton GroupName="Ball"
+                <RadioButton GroupName="Ball" Grid.Column="1" Grid.Row="4"
                              IsChecked="{Binding BallDataSource, Converter={StaticResource ballDatgaSource}, ConverterParameter={x:Static local:BallDataSource.Magnetometer}}"/>
-                <UserControl ContentTemplate="{StaticResource Sensor}" 
+                <UserControl ContentTemplate="{StaticResource Sensor}" Grid.Column="0" Grid.Row="5"
                              Content="{Binding Pedometer}"/>
-                <Separator/>
-                <UserControl ContentTemplate="{StaticResource Sensor}" 
+                <Separator Grid.Column="1" Grid.Row="5"/>
+                <UserControl ContentTemplate="{StaticResource Sensor}" Grid.Column="0" Grid.Row="6"
                              Content="{Binding HumanPresence}"/>
-                <Separator/>
-            </UniformGrid>
+                <Separator Grid.Column="1" Grid.Row="6"/>
+            </Grid>
             <Canvas x:Name="PhantomCanvas" Grid.Column="1"/>
             <Canvas Grid.Column="1"
                     Background="AliceBlue">
