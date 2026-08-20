@@ -12,6 +12,8 @@
         MinWidth="500">
     <Window.Resources>
         <local:StatusToBrushConverter x:Key="statusToBrush"/>
+        <local:AbsoluteToRelativeXConverter x:Key="absToRelX"/>
+        <local:AbsoluteToRelativeYConverter x:Key="absToRelY"/>
 
         <DataTemplate x:Key="Sensor" DataType="local:SensorData">
             <StackPanel>
@@ -66,10 +68,11 @@
                 <UserControl ContentTemplate="{StaticResource Sensor}" 
                              Content="{Binding HumanPresence}"/>
             </UniformGrid>
+            <Canvas x:Name="PhantomCanvas" Grid.Column="1"/>
             <Canvas Grid.Column="1">
-                <Ellipse Width="10" Height="10" Fill="Blue"
-                         Canvas.Left="{Binding Ball.X}"
-                         Canvas.Top="{Binding Ball.Y}"/>
+                <Ellipse Grid.Column="1" Width="10" Height="10" Fill="Blue"
+                         Canvas.Left="{Binding Ball.X, Converter={StaticResource absToRelX}, ConverterParameter={x:Reference PhantomCanvas}}"
+                         Canvas.Top="{Binding Ball.Y, Converter={StaticResource absToRelY}, ConverterParameter={x:Reference PhantomCanvas}}"/>
             </Canvas>
         </Grid>
         <UniformGrid Grid.Row="2" Columns="4" Rows="1">
