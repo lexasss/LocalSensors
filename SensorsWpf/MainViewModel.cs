@@ -125,6 +125,12 @@ internal partial class MainViewModel : ObservableObject
 
     SensorProvider _sensors = new();
 
+    private void MoveBall(double x, double y)
+    {
+        Ball.X = 40 + x;
+        Ball.Y = 40 + -y;
+    }
+
     private void SimpleOrientation_OrientationChanged(SimpleOrientationSensor sender, SimpleOrientationSensorOrientationChangedEventArgs args)
     {
         var data = args.Orientation;
@@ -153,8 +159,7 @@ internal partial class MainViewModel : ObservableObject
     {
         var data = args.Reading;
         Accelerometer.Info = $"X = {data.AccelerationX:F3} G, Y = {data.AccelerationY:F3} G, Z = {data.AccelerationZ:F3} G";
-        Ball.X = 40 + data.AccelerationX * 100;
-        Ball.Y = 40 + (data.AccelerationY + 1) * 100;
+        MoveBall(data.AccelerationX * 100, (data.AccelerationY + 1) * 100);
     }
 
     private void Gyrometer_ReadingChanged(Gyrometer sender, GyrometerReadingChangedEventArgs args)
