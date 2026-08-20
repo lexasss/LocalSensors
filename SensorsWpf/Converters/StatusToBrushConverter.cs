@@ -2,7 +2,7 @@
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace SensorsWpf;
+namespace SensorsWpf.Converters;
 
 internal class StatusToBrushConverter : IValueConverter
 {

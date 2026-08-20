@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Data;
 
-namespace SensorsWpf;
+namespace SensorsWpf.Converters;
 
 internal class AbsoluteToRelativeXConverter : IValueConverter
 {

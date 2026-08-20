@@ -1,35 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Sensors;
 using Windows.Devices.Sensors;
+using SensorsWpf.Models;
+using SensorsWpf.Enums;
+using SensorsWpf.Services;
 
-namespace SensorsWpf;
-
-internal partial class SensorData(string name, bool status = false, string info = "") : ObservableObject
-{
-    [ObservableProperty]
-    public partial string Name { get; set; } = name;
-    [ObservableProperty]
-    public partial bool Status { get; set; } = status;
-    [ObservableProperty]
-    public partial string Info { get; set; } = info;
-}
-
-internal partial class Point(double x = 0, double y = 0) : ObservableObject
-{
-    [ObservableProperty]
-    public partial double X { get; set; } = x;
-    [ObservableProperty]
-    public partial double Y { get; set; } = y;
-}
-
-internal enum BallDataSource
-{
-    Accelerometer,
-    Gyrometer,
-    Inclinometer,
-    Orientation,
-    Magnetometer
-}
+namespace SensorsWpf.ViewModels;
 
 internal partial class MainViewModel : ObservableObject
 {

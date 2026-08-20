@@ -2,7 +2,7 @@
 using Windows.Devices.Sensors;
 using Windows.Foundation;
 
-namespace Sensors;
+namespace SensorsWpf.Services;
 
 [AttributeUsage(AttributeTargets.Property)]
 internal class SensorAttribute(string name) : Attribute
