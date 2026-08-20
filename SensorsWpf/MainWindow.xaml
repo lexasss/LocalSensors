@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SensorsWpf"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="Sensors"
         Height="600"
@@ -14,6 +15,7 @@
         <local:StatusToBrushConverter x:Key="statusToBrush"/>
         <local:AbsoluteToRelativeXConverter x:Key="absToRelX"/>
         <local:AbsoluteToRelativeYConverter x:Key="absToRelY"/>
+        <local:BallDataSourceConverter x:Key="ballDatgaSource"/>
 
         <DataTemplate x:Key="Sensor" DataType="local:SensorData">
             <StackPanel>
@@ -31,6 +33,7 @@
             </StackPanel>
         </DataTemplate>
     </Window.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -69,23 +72,23 @@
                 <UserControl ContentTemplate="{StaticResource Sensor}" 
                              Content="{Binding Accelerometer}"/>
                 <RadioButton GroupName="Ball"
-                             IsChecked="{Binding BallDataSource}"/>
+                             IsChecked="{Binding BallDataSource, Converter={StaticResource ballDatgaSource}, ConverterParameter={x:Static local:BallDataSource.Accelerometer}}"/>
                 <UserControl ContentTemplate="{StaticResource Sensor}" 
                              Content="{Binding Gyrometer}"/>
                 <RadioButton GroupName="Ball"
-                             IsChecked="{Binding BallDataSource}"/>
+                             IsChecked="{Binding BallDataSource, Converter={StaticResource ballDatgaSource}, ConverterParameter={x:Static local:BallDataSource.Gyrometer}}"/>
                 <UserControl ContentTemplate="{StaticResource Sensor}" 
                              Content="{Binding Inclinometer}"/>
                 <RadioButton GroupName="Ball"
-                             IsChecked="{Binding BallDataSource}"/>
+                             IsChecked="{Binding BallDataSource, Converter={StaticResource ballDatgaSource}, ConverterParameter={x:Static local:BallDataSource.Inclinometer}}"/>
                 <UserControl ContentTemplate="{StaticResource Sensor}" 
                              Content="{Binding Orientation}"/>
                 <RadioButton GroupName="Ball"
-                             IsChecked="{Binding BallDataSource}"/>
+                             IsChecked="{Binding BallDataSource, Converter={StaticResource ballDatgaSource}, ConverterParameter={x:Static local:BallDataSource.Orientation}}"/>
                 <UserControl ContentTemplate="{StaticResource Sensor}" 
                              Content="{Binding Magnetometer}"/>
                 <RadioButton GroupName="Ball"
-                             IsChecked="{Binding BallDataSource}"/>
+                             IsChecked="{Binding BallDataSource, Converter={StaticResource ballDatgaSource}, ConverterParameter={x:Static local:BallDataSource.Magnetometer}}"/>
                 <UserControl ContentTemplate="{StaticResource Sensor}" 
                              Content="{Binding Pedometer}"/>
                 <Separator/>

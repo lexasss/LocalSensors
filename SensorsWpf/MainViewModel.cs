@@ -25,7 +25,10 @@ internal partial class Point(double x = 0, double y = 0) : ObservableObject
 internal enum BallDataSource
 {
     Accelerometer,
-    Gyrometer
+    Gyrometer,
+    Inclinometer,
+    Orientation,
+    Magnetometer
 }
 
 internal partial class MainViewModel : ObservableObject
@@ -47,6 +50,9 @@ internal partial class MainViewModel : ObservableObject
     public SensorData SimpleOrientation { get; } = new("Mode");
 
     public Point Ball { get; } = new Point();
+
+    [ObservableProperty]
+    public partial BallDataSource BallDataSource { get; set; } = BallDataSource.Accelerometer;
 
     public MainViewModel()
     {
@@ -165,32 +171,40 @@ internal partial class MainViewModel : ObservableObject
     {
         var data = args.Reading;
         Accelerometer.Info = $"X = {data.AccelerationX:F3} G, Y = {data.AccelerationY:F3} G, Z = {data.AccelerationZ:F3} G";
-        //MoveBall(data.AccelerationX * 100, data.AccelerationY * 100);
+        if (BallDataSource == BallDataSource.Accelerometer)
+            MoveBall(data.AccelerationX * 100, data.AccelerationY * 100);
     }
 
     private void Gyrometer_ReadingChanged(Gyrometer sender, GyrometerReadingChangedEventArgs args)
     {
         var data = args.Reading;
         Gyrometer.Info = $"X = {data.AngularVelocityX:F3}°/s, Y = {data.AngularVelocityY:F3}°/s, Z = {data.AngularVelocityY:F3}°/s";
-        MoveBall(data.AngularVelocityY * 1, data.AngularVelocityX * 1);
+        if (BallDataSource == BallDataSource.Gyrometer)
+            MoveBall(data.AngularVelocityY * 1, data.AngularVelocityX * 1);
     }
 
     private void Inclinometer_ReadingChanged(Inclinometer sender, InclinometerReadingChangedEventArgs args)
     {
         var data = args.Reading;
         Inclinometer.Info = $"P = {data.PitchDegrees:F3}°, R = {data.RollDegrees:F3}°, Y = {data.YawDegrees:F3}°";
+        if (BallDataSource == BallDataSource.Inclinometer)
+            MoveBall(data.PitchDegrees * 0.01, data.RollDegrees * 0.01);
     }
 
     private void Orientation_ReadingChanged(OrientationSensor sender, OrientationSensorReadingChangedEventArgs args)
     {
         var data = args.Reading;
         Orientation.Info = $"W = {data.Quaternion.W:F3}, X = {data.Quaternion.X:F3}, Y = {data.Quaternion.Y:F3}, Z = {data.Quaternion.Z:F3}";
+        if (BallDataSource == BallDataSource.Orientation)
+            MoveBall(data.Quaternion.X * 1, data.Quaternion.Y * 1);
     }
 
     private void Magnetometer_ReadingChanged(Magnetometer sender, MagnetometerReadingChangedEventArgs args)
     {
         var data = args.Reading;
         Magnetometer.Info = $"X = {data.MagneticFieldX:F3}, Y = {data.MagneticFieldY:F3}, Z = {data.MagneticFieldZ:F3}";
+        if (BallDataSource == BallDataSource.Orientation)
+            MoveBall(data.MagneticFieldX * 1, data.MagneticFieldY * 1);
     }
 
     private void Pedometer_ReadingChanged(Pedometer sender, PedometerReadingChangedEventArgs args)
