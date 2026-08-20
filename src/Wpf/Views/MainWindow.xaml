@@ -13,7 +13,8 @@
         Height="600"
         Width="600"
         MinHeight="500"
-        MinWidth="500">
+        MinWidth="500"
+        Icon="/Assets/Images/icon.png">
     <Window.Resources>
         <conv:StatusToBrushConverter x:Key="statusToBrush"/>
         <conv:AbsoluteToRelativeXConverter x:Key="absToRelX"/>
