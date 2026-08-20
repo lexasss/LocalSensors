@@ -8,13 +8,14 @@ internal class AbsoluteToRelativeXConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        var canvas = parameter as Canvas;
+        var x = (double)value;
         double dx = 0;
+        var canvas = parameter as Canvas;
         if (canvas != null)
         {
             dx = canvas.ActualWidth / 2;
         }
-        return -5 + dx;
+        return x - 5 + dx;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
@@ -25,13 +26,14 @@ internal class AbsoluteToRelativeYConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        var canvas = parameter as Canvas;
+        var y = (double)value;
         double dy = 0;
+        var canvas = parameter as Canvas;
         if (canvas != null)
         {
             dy = canvas.ActualHeight / 2;
         }
-        return -5 + dy;
+        return y - 5 + dy;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>

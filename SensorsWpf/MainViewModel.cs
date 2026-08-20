@@ -22,6 +22,12 @@ internal partial class Point(double x = 0, double y = 0) : ObservableObject
     public partial double Y { get; set; } = y;
 }
 
+internal enum BallDataSource
+{
+    Accelerometer,
+    Gyrometer
+}
+
 internal partial class MainViewModel : ObservableObject
 {
     public SensorData Activity { get; } = new("Activity");
@@ -127,8 +133,8 @@ internal partial class MainViewModel : ObservableObject
 
     private void MoveBall(double x, double y)
     {
-        Ball.X = 40 + x;
-        Ball.Y = 40 + -y;
+        Ball.X = x;
+        Ball.Y = -y;
     }
 
     private void SimpleOrientation_OrientationChanged(SimpleOrientationSensor sender, SimpleOrientationSensorOrientationChangedEventArgs args)
@@ -159,13 +165,14 @@ internal partial class MainViewModel : ObservableObject
     {
         var data = args.Reading;
         Accelerometer.Info = $"X = {data.AccelerationX:F3} G, Y = {data.AccelerationY:F3} G, Z = {data.AccelerationZ:F3} G";
-        MoveBall(data.AccelerationX * 100, (data.AccelerationY + 1) * 100);
+        //MoveBall(data.AccelerationX * 100, data.AccelerationY * 100);
     }
 
     private void Gyrometer_ReadingChanged(Gyrometer sender, GyrometerReadingChangedEventArgs args)
     {
         var data = args.Reading;
         Gyrometer.Info = $"X = {data.AngularVelocityX:F3}°/s, Y = {data.AngularVelocityY:F3}°/s, Z = {data.AngularVelocityY:F3}°/s";
+        MoveBall(data.AngularVelocityY * 1, data.AngularVelocityX * 1);
     }
 
     private void Inclinometer_ReadingChanged(Inclinometer sender, InclinometerReadingChangedEventArgs args)

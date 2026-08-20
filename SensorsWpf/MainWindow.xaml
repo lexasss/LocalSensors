@@ -48,28 +48,54 @@
                          Content="{Binding HingeAngle}"/>
         </UniformGrid>
         <Grid Grid.Row="1">
+            <Grid.Resources>
+                <Style TargetType="RadioButton">
+                    <Setter Property="HorizontalAlignment" Value="Right"/>
+                    <Setter Property="VerticalAlignment" Value="Top"/>
+                    <Setter Property="Margin" Value="4,8"/>
+                </Style>
+                <Style TargetType="Separator">
+                    <Setter Property="VerticalAlignment" Value="Top"/>
+                    <Setter Property="HorizontalAlignment" Value="Right"/>
+                    <Setter Property="Width" Value="12"/>
+                    <Setter Property="Margin" Value="4,12"/>
+                </Style>
+            </Grid.Resources>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <UniformGrid Grid.Column="0" Columns="1" Rows="7" Width="300">
+            <UniformGrid Grid.Column="0" Columns="2" Rows="7" Width="300">
                 <UserControl ContentTemplate="{StaticResource Sensor}" 
                              Content="{Binding Accelerometer}"/>
+                <RadioButton GroupName="Ball"
+                             IsChecked="{Binding BallDataSource}"/>
                 <UserControl ContentTemplate="{StaticResource Sensor}" 
                              Content="{Binding Gyrometer}"/>
+                <RadioButton GroupName="Ball"
+                             IsChecked="{Binding BallDataSource}"/>
                 <UserControl ContentTemplate="{StaticResource Sensor}" 
                              Content="{Binding Inclinometer}"/>
+                <RadioButton GroupName="Ball"
+                             IsChecked="{Binding BallDataSource}"/>
                 <UserControl ContentTemplate="{StaticResource Sensor}" 
                              Content="{Binding Orientation}"/>
+                <RadioButton GroupName="Ball"
+                             IsChecked="{Binding BallDataSource}"/>
                 <UserControl ContentTemplate="{StaticResource Sensor}" 
                              Content="{Binding Magnetometer}"/>
+                <RadioButton GroupName="Ball"
+                             IsChecked="{Binding BallDataSource}"/>
                 <UserControl ContentTemplate="{StaticResource Sensor}" 
                              Content="{Binding Pedometer}"/>
+                <Separator/>
                 <UserControl ContentTemplate="{StaticResource Sensor}" 
                              Content="{Binding HumanPresence}"/>
+                <Separator/>
             </UniformGrid>
             <Canvas x:Name="PhantomCanvas" Grid.Column="1"/>
-            <Canvas Grid.Column="1">
+            <Canvas Grid.Column="1"
+                    Background="AliceBlue">
                 <Ellipse Grid.Column="1" Width="10" Height="10" Fill="Blue"
                          Canvas.Left="{Binding Ball.X, Converter={StaticResource absToRelX}, ConverterParameter={x:Reference PhantomCanvas}}"
                          Canvas.Top="{Binding Ball.Y, Converter={StaticResource absToRelY}, ConverterParameter={x:Reference PhantomCanvas}}"/>
