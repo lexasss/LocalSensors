@@ -4,10 +4,12 @@ using Windows.Devices.Sensors;
 
 namespace SensorsWpf;
 
-internal partial class SensorData(string name, string info = "") : ObservableObject
+internal partial class SensorData(string name, bool status = false, string info = "") : ObservableObject
 {
     [ObservableProperty]
     public partial string Name { get; set; } = name;
+    [ObservableProperty]
+    public partial bool Status { get; set; } = status;
     [ObservableProperty]
     public partial string Info { get; set; } = info;
 }
@@ -43,35 +45,80 @@ internal partial class MainViewModel : ObservableObject
     public MainViewModel()
     {
         if (_sensors.Activity != null)
+        {
             _sensors.Activity.ReadingChanged += Activity_ReadingChanged;
+            Activity.Status = true;
+        }
         if (_sensors.Accelerometer != null)
+        {
             _sensors.Accelerometer.ReadingChanged += Accelerometer_ReadingChanged;
+            Accelerometer.Status = true;
+        }
         if (_sensors.Altimeter != null)
+        {
             _sensors.Altimeter.ReadingChanged += Altimeter_ReadingChanged;
+            Altimeter.Status = true;
+        }
         if (_sensors.Barometer != null)
+        {
             _sensors.Barometer.ReadingChanged += Barometer_ReadingChanged;
+            Barometer.Status = true;
+        }
         if (_sensors.Compass != null)
+        {
             _sensors.Compass.ReadingChanged += Compass_ReadingChanged;
+            Compass.Status = true;
+        }
         if (_sensors.Gyrometer != null)
+        {
             _sensors.Gyrometer.ReadingChanged += Gyrometer_ReadingChanged;
+            Gyrometer.Status = true;
+        }
         if (_sensors.HingeAngle != null)
+        {
             _sensors.HingeAngle.ReadingChanged += HingeAngle_ReadingChanged;
+            HingeAngle.Status = true;
+        }
         if (_sensors.HumanPresence != null)
+        {
             _sensors.HumanPresence.ReadingChanged += HumanPresence_ReadingChanged;
+            HumanPresence.Status = true;
+        }
         if (_sensors.Inclinometer != null)
+        {
             _sensors.Inclinometer.ReadingChanged += Inclinometer_ReadingChanged;
+            Inclinometer.Status = true;
+        }
         if (_sensors.Light != null)
+        {
             _sensors.Light.ReadingChanged += Light_ReadingChanged;
+            Light.Status = true;
+        }
         if (_sensors.Magnetometer != null)
+        {
             _sensors.Magnetometer.ReadingChanged += Magnetometer_ReadingChanged;
+            Magnetometer.Status = true;
+        }
         if (_sensors.Orientation != null)
+        {
             _sensors.Orientation.ReadingChanged += Orientation_ReadingChanged;
+            Orientation.Status = true;
+        }
         if (_sensors.Pedometer != null)
+        {
             _sensors.Pedometer.ReadingChanged += Pedometer_ReadingChanged;
+            Pedometer.Status = true;
+        }
         if (_sensors.Proximity != null)
+        {
             _sensors.Proximity.ReadingChanged += Proximity_ReadingChanged;
+            Proximity.Status = true;
+        }
         if (_sensors.SimpleOrientation != null)
+        {
             _sensors.SimpleOrientation.OrientationChanged += SimpleOrientation_OrientationChanged;
+            SimpleOrientation.Status = true;
+        }
     }
 
     #region Internal

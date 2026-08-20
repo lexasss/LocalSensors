@@ -7,8 +7,11 @@
         mc:Ignorable="d"
         Title="Sensors"
         Height="600"
-        Width="600">
+        Width="600"
+        MinHeight="500"
+        MinWidth="500">
     <Window.Resources>
+        <local:StatusToBrushConverter x:Key="statusToBrush"/>
         <Style TargetType="Label">
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="FontSize" Value="12"/>
@@ -17,78 +20,71 @@
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Margin" Value="8,4"/>
         </Style>
+
+        <DataTemplate x:Key="Sensor" DataType="local:SensorData">
+            <StackPanel>
+                <WrapPanel>
+                    <Ellipse Width="12" Height="12"
+                             Margin="4,2,0,2"
+                             Fill="{Binding Status, Converter={StaticResource statusToBrush}}"/>
+                    <Label Content="{Binding Name}"/>
+                </WrapPanel>
+                <TextBlock Text="{Binding Info}"/>
+            </StackPanel>
+        </DataTemplate>
     </Window.Resources>
-    <UniformGrid Columns="1" Rows="9">
-        <UniformGrid Columns="4" Rows="1">
-            <StackPanel>
-                <Label Content="{Binding SimpleOrientation.Name}"/>
-                <TextBlock Text="{Binding SimpleOrientation.Info}"/>
-            </StackPanel>
-            <StackPanel>
-                <Label Content="{Binding Activity.Name}"/>
-                <TextBlock Text="{Binding Activity.Info}"/>
-            </StackPanel>
-            <StackPanel>
-                <Label Content="{Binding Proximity.Name}"/>
-                <TextBlock Text="{Binding Proximity.Info}"/>
-            </StackPanel>
-            <StackPanel>
-                <Label Content="{Binding HingeAngle.Name}"/>
-                <TextBlock Text="{Binding HingeAngle.Info}"/>
-            </StackPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="7*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <UniformGrid Grid.Row="0" Columns="4" Rows="1">
+            <UserControl ContentTemplate="{StaticResource Sensor}" 
+                         Content="{Binding SimpleOrientation}"/>
+            <UserControl ContentTemplate="{StaticResource Sensor}" 
+                         Content="{Binding Activity}"/>
+            <UserControl ContentTemplate="{StaticResource Sensor}" 
+                         Content="{Binding Proximity}"/>
+            <UserControl ContentTemplate="{StaticResource Sensor}" 
+                         Content="{Binding HingeAngle}"/>
         </UniformGrid>
-        <StackPanel Orientation="Horizontal">
-            <StackPanel Width="300">
-                <Label Content="{Binding Accelerometer.Name}"/>
-                <TextBlock Text="{Binding Accelerometer.Info}"/>
-            </StackPanel>
-            <Canvas Width="100">
-                <Ellipse Width="10" Height="10" Fill="Red"
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <UniformGrid Grid.Column="0" Columns="1" Rows="7" Width="300">
+                <UserControl ContentTemplate="{StaticResource Sensor}" 
+                             Content="{Binding Accelerometer}"/>
+                <UserControl ContentTemplate="{StaticResource Sensor}" 
+                             Content="{Binding Gyrometer}"/>
+                <UserControl ContentTemplate="{StaticResource Sensor}" 
+                             Content="{Binding Inclinometer}"/>
+                <UserControl ContentTemplate="{StaticResource Sensor}" 
+                             Content="{Binding Orientation}"/>
+                <UserControl ContentTemplate="{StaticResource Sensor}" 
+                             Content="{Binding Magnetometer}"/>
+                <UserControl ContentTemplate="{StaticResource Sensor}" 
+                             Content="{Binding Pedometer}"/>
+                <UserControl ContentTemplate="{StaticResource Sensor}" 
+                             Content="{Binding HumanPresence}"/>
+            </UniformGrid>
+            <Canvas Grid.Column="1">
+                <Ellipse Width="10" Height="10" Fill="Blue"
                          Canvas.Left="{Binding Ball.X}"
                          Canvas.Top="{Binding Ball.Y}"/>
             </Canvas>
-        </StackPanel>
-        <StackPanel>
-            <Label Content="{Binding Gyrometer.Name}"/>
-            <TextBlock Text="{Binding Gyrometer.Info}"/>
-        </StackPanel>
-        <StackPanel>
-            <Label Content="{Binding Inclinometer.Name}"/>
-            <TextBlock Text="{Binding Inclinometer.Info}"/>
-        </StackPanel>
-        <StackPanel>
-            <Label Content="{Binding Orientation.Name}"/>
-            <TextBlock Text="{Binding Orientation.Info}"/>
-        </StackPanel>
-        <StackPanel>
-            <Label Content="{Binding Magnetometer.Name}"/>
-            <TextBlock Text="{Binding Magnetometer.Info}"/>
-        </StackPanel>
-        <StackPanel>
-            <Label Content="{Binding Pedometer.Name}"/>
-            <TextBlock Text="{Binding Pedometer.Info}"/>
-        </StackPanel>
-        <StackPanel>
-            <Label Content="{Binding HumanPresence.Name}"/>
-            <TextBlock Text="{Binding HumanPresence.Info}"/>
-        </StackPanel>
-        <UniformGrid Columns="4" Rows="1">
-            <StackPanel>
-                <Label Content="{Binding Altimeter.Name}"/>
-                <TextBlock Text="{Binding Altimeter.Info}"/>
-            </StackPanel>
-            <StackPanel>
-                <Label Content="{Binding Barometer.Name}"/>
-                <TextBlock Text="{Binding Barometer.Info}"/>
-            </StackPanel>
-            <StackPanel>
-                <Label Content="{Binding Compass.Name}"/>
-                <TextBlock Text="{Binding Compass.Info}"/>
-            </StackPanel>
-            <StackPanel>
-                <Label Content="{Binding Light.Name}"/>
-                <TextBlock Text="{Binding Light.Info}"/>
-            </StackPanel>
+        </Grid>
+        <UniformGrid Grid.Row="2" Columns="4" Rows="1">
+            <UserControl ContentTemplate="{StaticResource Sensor}" 
+                         Content="{Binding Altimeter}"/>
+            <UserControl ContentTemplate="{StaticResource Sensor}" 
+                         Content="{Binding Barometer}"/>
+            <UserControl ContentTemplate="{StaticResource Sensor}" 
+                         Content="{Binding Compass}"/>
+            <UserControl ContentTemplate="{StaticResource Sensor}" 
+                         Content="{Binding Light}"/>
         </UniformGrid>
-    </UniformGrid>
+    </Grid>
 </Window>
