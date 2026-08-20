@@ -6,7 +6,7 @@ using SensorsWpf.Services;
 
 namespace SensorsWpf.ViewModels;
 
-internal partial class MainViewModel : ObservableObject
+public partial class MainViewModel : ObservableObject
 {
     public SensorData Activity { get; } = new("Activity");
     public SensorData Accelerometer { get; } = new("Accelerometer");
@@ -29,8 +29,10 @@ internal partial class MainViewModel : ObservableObject
     [ObservableProperty]
     public partial BallDataSource BallDataSource { get; set; } = BallDataSource.Accelerometer;
 
-    public MainViewModel()
+    public MainViewModel(SensorProvider sensors)
     {
+        _sensors = sensors;
+
         if (_sensors.Activity != null)
         {
             _sensors.Activity.ReadingChanged += Activity_ReadingChanged;
@@ -110,7 +112,7 @@ internal partial class MainViewModel : ObservableObject
 
     #region Internal
 
-    SensorProvider _sensors = new();
+    readonly SensorProvider _sensors;
 
     private void MoveBall(double x, double y)
     {

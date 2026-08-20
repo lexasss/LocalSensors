@@ -10,7 +10,7 @@ internal class SensorAttribute(string name) : Attribute
     public string Name { get; } = name;
 }
 
-internal class SensorProvider
+public class SensorProvider
 {
     [Sensor("Activity")]
     public ActivitySensor? Activity { get; }

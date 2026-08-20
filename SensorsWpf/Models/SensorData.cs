@@ -2,7 +2,7 @@
 
 namespace SensorsWpf.Models;
 
-internal partial class SensorData(string name, bool status = false, string info = "") : ObservableObject
+public partial class SensorData(string name, bool status = false, string info = "") : ObservableObject
 {
     [ObservableProperty]
     public partial string Name { get; set; } = name;

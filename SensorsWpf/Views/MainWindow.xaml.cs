@@ -4,9 +4,9 @@ namespace SensorsWpf.Views;
 
 public partial class MainWindow : Window
 {
-    public MainWindow()
+    public MainWindow(ViewModels.MainViewModel vm)
     {
         InitializeComponent();
-        DataContext = new ViewModels.MainViewModel();
+        DataContext = vm;
     }
 }

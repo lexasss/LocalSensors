@@ -1,6 +1,6 @@
 ﻿namespace SensorsWpf.Enums;
 
-internal enum BallDataSource
+public enum BallDataSource
 {
     Accelerometer,
     Gyrometer,
