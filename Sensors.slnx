@@ -1,4 +1,4 @@
 <Solution>
-  <Project Path="SensorsWpf/SensorsWpf.csproj" Id="f2463fab-0265-422e-a7ba-8f41a45ea0f1" />
-  <Project Path="src/Sensors.csproj" />
+  <Project Path="src/Console/SensorsConsole.csproj" />
+  <Project Path="src/Wpf/SensorsWpf.csproj" Id="f2463fab-0265-422e-a7ba-8f41a45ea0f1" />
 </Solution>

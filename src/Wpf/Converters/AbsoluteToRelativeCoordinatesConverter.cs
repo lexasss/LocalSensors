@@ -10,8 +10,7 @@ internal class AbsoluteToRelativeXConverter : IValueConverter
     {
         var x = (double)value;
         double dx = 0;
-        var canvas = parameter as Canvas;
-        if (canvas != null)
+        if (parameter is Canvas canvas)
         {
             dx = canvas.ActualWidth / 2;
         }
@@ -28,8 +27,7 @@ internal class AbsoluteToRelativeYConverter : IValueConverter
     {
         var y = (double)value;
         double dy = 0;
-        var canvas = parameter as Canvas;
-        if (canvas != null)
+        if (parameter is Canvas canvas)
         {
             dy = canvas.ActualHeight / 2;
         }

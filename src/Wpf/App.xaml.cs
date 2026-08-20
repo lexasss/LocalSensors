@@ -18,7 +18,7 @@ public partial class App : Application
 
     #region Internal
 
-    private IServiceProvider _serviceProvider;
+    private readonly IServiceProvider _serviceProvider;
 
     protected override void OnStartup(StartupEventArgs e)
     {
@@ -38,7 +38,7 @@ public partial class App : Application
         base.OnExit(e);
     }
 
-    private void ConfigureServices(IServiceCollection services)
+    private static void ConfigureServices(IServiceCollection services)
     {
         services.AddSingleton<SensorProvider>();
         services.AddSingleton<MainViewModel>();
