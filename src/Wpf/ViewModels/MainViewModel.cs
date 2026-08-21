@@ -157,7 +157,7 @@ public partial class MainViewModel : ObservableObject
     private void Accelerometer_ReadingChanged(Accelerometer sender, AccelerometerReadingChangedEventArgs args)
     {
         var data = args.Reading;
-        Accelerometer.Info = $"X = {data.AccelerationX,7:F3} G, Y = {data.AccelerationY,7:F3} G, Z = {data.AccelerationZ,7:F3} G";
+        Accelerometer.Info = $"X = {data.AccelerationX,6:F3} G, Y = {data.AccelerationY,6:F3} G, Z = {data.AccelerationZ,6:F3} G";
         if (BallDataSource == BallDataSource.Accelerometer)
             MoveBall(data.AccelerationX, data.AccelerationY, _dataFactors["Accelerometer"]);
     }
