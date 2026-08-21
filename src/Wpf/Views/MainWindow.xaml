@@ -124,13 +124,18 @@
                              Content="{Binding HumanPresence}"/>
                 <Separator Grid.Column="1" Grid.Row="6"/>
             </Grid>
-            <Canvas x:Name="PhantomCanvas" Grid.Column="1"/>
-            <Canvas Grid.Column="1"
-                    Background="AliceBlue">
-                <Ellipse Grid.Column="1" Width="10" Height="10" Fill="Blue"
-                         Canvas.Left="{Binding Ball.X, Converter={StaticResource absToRelX}, ConverterParameter={x:Reference PhantomCanvas}}"
-                         Canvas.Top="{Binding Ball.Y, Converter={StaticResource absToRelY}, ConverterParameter={x:Reference PhantomCanvas}}"/>
-            </Canvas>
+            <Grid Grid.Column="1"
+                  Background="AliceBlue">
+                <Ellipse Fill="Blue"
+                         Width="{Binding BallSize}"
+                         Height="{Binding BallSize}"
+                         RenderTransformOrigin="0.5,0.5">
+                    <Ellipse.RenderTransform>
+                        <TranslateTransform X="{Binding Ball.X}"
+                                            Y="{Binding Ball.Y}"/>
+                    </Ellipse.RenderTransform>
+                </Ellipse>
+            </Grid>
         </Grid>
         <UniformGrid Grid.Row="2" Columns="4" Rows="1">
             <UserControl ContentTemplate="{StaticResource Sensor}" 

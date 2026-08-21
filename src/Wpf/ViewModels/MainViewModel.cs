@@ -25,6 +25,7 @@ public partial class MainViewModel : ObservableObject
     public SensorData SimpleOrientation { get; } = new("Mode");
 
     public Point Ball { get; } = new Point();
+    public double BallSize { get; } = 10;
 
     [ObservableProperty]
     public partial BallDataSource BallDataSource { get; set; } = BallDataSource.Accelerometer;
@@ -139,13 +140,13 @@ public partial class MainViewModel : ObservableObject
     private void Activity_ReadingChanged(ActivitySensor sender, ActivitySensorReadingChangedEventArgs args)
     {
         var data = args.Reading;
-        Activity.Info = $"{data.Activity:F3}";
+        Activity.Info = $"{data.Activity}";
     }
 
     private void Compass_ReadingChanged(Compass sender, CompassReadingChangedEventArgs args)
     {
         var data = args.Reading;
-        Compass.Info = $"{data.HeadingTrueNorth:F3}°";
+        Compass.Info = data.HeadingTrueNorth != null ? $"{data.HeadingTrueNorth:F3}°" : "-";
     }
 
     private void HingeAngle_ReadingChanged(HingeAngleSensor sender, HingeAngleSensorReadingChangedEventArgs args)
@@ -165,7 +166,7 @@ public partial class MainViewModel : ObservableObject
     private void Gyrometer_ReadingChanged(Gyrometer sender, GyrometerReadingChangedEventArgs args)
     {
         var data = args.Reading;
-        Gyrometer.Info = $"X = {data.AngularVelocityX,7:F3}°/s, Y = {data.AngularVelocityY,7:F3}°/s, Z = {data.AngularVelocityY,7:F3}°/s";
+        Gyrometer.Info = $"X = {data.AngularVelocityX,7:F3}°/s, Y = {data.AngularVelocityY,7:F3}°/s, Z = {data.AngularVelocityZ,7:F3}°/s";
         if (BallDataSource == BallDataSource.Gyrometer)
             MoveBall(data.AngularVelocityY, data.AngularVelocityX, _dataFactors[Gyrometer.Name]);
     }
@@ -221,7 +222,7 @@ public partial class MainViewModel : ObservableObject
     private void Light_ReadingChanged(LightSensor sender, LightSensorReadingChangedEventArgs args)
     {
         var data = args.Reading;
-        Light.Info = $"{data.IlluminanceInLux:F3}°";
+        Light.Info = $"{data.IlluminanceInLux:F3} lux";
     }
 
     private void Proximity_ReadingChanged(ProximitySensor sender, ProximitySensorReadingChangedEventArgs args)
