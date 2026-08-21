@@ -10,6 +10,7 @@
     <WindowsSdkPackageVersion>10.0.22621.56</WindowsSdkPackageVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <ApplicationIcon>Assets\Images\icon.ico</ApplicationIcon>
+    <Copyright>Oleg Spakov © 2026</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
