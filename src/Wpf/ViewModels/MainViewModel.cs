@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using SensorsWpf.Enums;
 using SensorsWpf.Models;
 using SensorsWpf.Services;
@@ -56,7 +56,7 @@ public partial class MainViewModel : ObservableObject
 
         Register<Compass, CompassReadingChangedEventArgs>(Compass, sensors.Compass,
             (s, h) => s.ReadingChanged += h,
-            r => $"{r.Reading.HeadingTrueNorth:F3}°");
+            r => r.Reading.HeadingTrueNorth != null ? $"{r.Reading.HeadingTrueNorth:F3}°" : "-");
 
         Register<Gyrometer, GyrometerReadingChangedEventArgs>(Gyrometer, sensors.Gyrometer,
             (s, h) => s.ReadingChanged += h,
@@ -110,8 +110,7 @@ public partial class MainViewModel : ObservableObject
 
     private readonly Dispatcher _dispatcher;
 
-    private static readonly IReadOnlyDictionary<BallDataSource, double> Factors =
-        new Dictionary<BallDataSource, double>
+    private static readonly Dictionary<BallDataSource, double> Factors = new()
         {
             [BallDataSource.Accelerometer] = 100,
             [BallDataSource.Gyrometer] = 1,
@@ -131,7 +130,7 @@ public partial class MainViewModel : ObservableObject
         if (sensor is null)
             return;
 
-        TypedEventHandler<TSensor, TArgs> handler = (_, args) =>
+        void handler(TSensor _, TArgs args)
         {
             string info = format(args);
             RunOnUiThread(() =>
@@ -139,7 +138,7 @@ public partial class MainViewModel : ObservableObject
                 data.Info = info;
                 moveBall?.Invoke(args);
             });
-        };
+        }
 
         subscribe(sensor, handler);
         data.Status = true;

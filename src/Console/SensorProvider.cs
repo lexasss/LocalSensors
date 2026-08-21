@@ -1,8 +1,8 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Windows.Devices.Sensors;
 using Windows.Foundation;
 
-namespace Sensors;
+namespace SensorsConsole;
 
 [AttributeUsage(AttributeTargets.Property)]
 internal class SensorAttribute(string name) : Attribute
@@ -55,7 +55,6 @@ internal class SensorProvider
         .Where(x => x.Attribute != null)
         .Select(x => new SensorStatus(x.Attribute!.Name, x.Property.GetValue(this) != null))
         .ToArray();
-
 
     public SensorProvider()
     {

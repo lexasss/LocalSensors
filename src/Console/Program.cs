@@ -1,10 +1,10 @@
-﻿using Windows.Devices.Sensors;
+using Windows.Devices.Sensors;
 
-namespace Sensors;
+namespace SensorsConsole;
 
-class Program
+internal class Program
 {
-    static async Task Main()
+    public static async Task Main()
     {
         var provider = new SensorProvider();
 
@@ -23,34 +23,20 @@ class Program
                 data => $"{data.Activity}",
                 1, 0);
         }
-        if (provider.Accelerometer != null)
-            provider.Accelerometer.ReadingChanged += Accelerometer_ReadingChanged;
-        if (provider.Altimeter != null)
-            provider.Altimeter.ReadingChanged += Altimeter_ReadingChanged;
-        if (provider.Barometer != null)
-            provider.Barometer.ReadingChanged += Barometer_ReadingChanged;
-        if (provider.Compass != null)
-            provider.Compass.ReadingChanged += Compass_ReadingChanged;
-        if (provider.Gyrometer != null)
-            provider.Gyrometer.ReadingChanged += Gyrometer_ReadingChanged;
-        if (provider.HingeAngle != null)
-            provider.HingeAngle.ReadingChanged += HingeAngle_ReadingChanged;
-        if (provider.HumanPresence != null)
-            provider.HumanPresence.ReadingChanged += HumanPresence_ReadingChanged;
-        if (provider.Inclinometer != null)
-            provider.Inclinometer.ReadingChanged += Inclinometer_ReadingChanged;
-        if (provider.Light != null)
-            provider.Light.ReadingChanged += Light_ReadingChanged;
-        if (provider.Magnetometer != null)
-            provider.Magnetometer.ReadingChanged += Magnetometer_ReadingChanged;
-        if (provider.Orientation != null)
-            provider.Orientation.ReadingChanged += Orientation_ReadingChanged;
-        if (provider.Pedometer != null)
-            provider.Pedometer.ReadingChanged += Pedometer_ReadingChanged;
-        if (provider.Proximity != null)
-            provider.Proximity.ReadingChanged += Proximity_ReadingChanged;
-        if (provider.SimpleOrientation != null)
-            provider.SimpleOrientation.OrientationChanged += SimpleOrientation_OrientationChanged;
+        provider.Accelerometer?.ReadingChanged += Accelerometer_ReadingChanged;
+        provider.Altimeter?.ReadingChanged += Altimeter_ReadingChanged;
+        provider.Barometer?.ReadingChanged += Barometer_ReadingChanged;
+        provider.Compass?.ReadingChanged += Compass_ReadingChanged;
+        provider.Gyrometer?.ReadingChanged += Gyrometer_ReadingChanged;
+        provider.HingeAngle?.ReadingChanged += HingeAngle_ReadingChanged;
+        provider.HumanPresence?.ReadingChanged += HumanPresence_ReadingChanged;
+        provider.Inclinometer?.ReadingChanged += Inclinometer_ReadingChanged;
+        provider.Light?.ReadingChanged += Light_ReadingChanged;
+        provider.Magnetometer?.ReadingChanged += Magnetometer_ReadingChanged;
+        provider.Orientation?.ReadingChanged += Orientation_ReadingChanged;
+        provider.Pedometer?.ReadingChanged += Pedometer_ReadingChanged;
+        provider.Proximity?.ReadingChanged += Proximity_ReadingChanged;
+        provider.SimpleOrientation?.OrientationChanged += SimpleOrientation_OrientationChanged;
 
         Console.CursorVisible = false;
         Console.ReadLine();
@@ -69,7 +55,7 @@ class Program
     private static void Activity_ReadingChanged(ActivitySensor sender, ActivitySensorReadingChangedEventArgs args)
     {
         var data = args.Reading;
-        var info = $"{data.Activity:F3}";
+        var info = $"{data.Activity}";
         Printer.Print("Activity", info, 1, 0);
     }
 
@@ -97,7 +83,7 @@ class Program
     private static void Gyrometer_ReadingChanged(Gyrometer sender, GyrometerReadingChangedEventArgs args)
     {
         var data = args.Reading;
-        var info = $"X = {data.AngularVelocityX:F3}°/s, Y = {data.AngularVelocityY:F3}°/s, Z = {data.AngularVelocityY:F3}°/s";
+        var info = $"X = {data.AngularVelocityX:F3}°/s, Y = {data.AngularVelocityY:F3}°/s, Z = {data.AngularVelocityZ:F3}°/s";
         Printer.Print("Gyrometer", info, 2);
     }
 
@@ -153,7 +139,7 @@ class Program
     private static void Light_ReadingChanged(LightSensor sender, LightSensorReadingChangedEventArgs args)
     {
         var data = args.Reading;
-        var info = $"{data.IlluminanceInLux:F3}°";
+        var info = $"{data.IlluminanceInLux:F3} lux";
         Printer.Print("Light", info, 2, 8);
     }
 

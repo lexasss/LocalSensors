@@ -1,6 +1,6 @@
-﻿using Windows.Foundation;
+using Windows.Foundation;
 
-namespace Sensors;
+namespace SensorsConsole;
 
 internal static class Printer
 {
@@ -34,31 +34,29 @@ internal static class Printer
     const int TABLE_CELL_WIDTH_LONG = 50;
     const int TABLE_CELL_HEIGHT = 3;
 
-    readonly static Lock _locker = new();
+    static readonly Lock _locker = new();
 
     private static void PrintAt<T>(int left, int top, string name, IAsyncOperation<T> task, Func<T, string> toString)
     {
-        _locker.Enter();
-
-        task.Wait();
-        var info = toString.Invoke(task.GetResults());
-        PrintAt(left, top, name, info.PadRight(15));
-
-        _locker.Exit();
+        lock (_locker)
+        {
+            task.Wait();
+            var info = toString.Invoke(task.GetResults());
+            PrintAt(left, top, name, info.PadRight(15));
+        }
     }
 
     private static void PrintAt(int left, int top, string name, string info)
     {
-        _locker.Enter();
-
-        Console.CursorLeft = left;
-        Console.CursorTop = top;
-        Console.Write($"{name}:");
-        Console.CursorLeft = left;
-        Console.CursorTop = top + 1;
-        Console.Write(info);
-
-        _locker.Exit();
+        lock (_locker)
+        {
+            Console.CursorLeft = left;
+            Console.CursorTop = top;
+            Console.Write($"{name}:");
+            Console.CursorLeft = left;
+            Console.CursorTop = top + 1;
+            Console.Write(info);
+        }
     }
 
     #endregion
