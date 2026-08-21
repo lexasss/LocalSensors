@@ -9,6 +9,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Style="{StaticResource MaterialDesignWindow}"
+        Language="en-US"
         Title="Sensors"
         Height="600"
         Width="700"

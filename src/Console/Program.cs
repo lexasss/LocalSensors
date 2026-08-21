@@ -1,3 +1,4 @@
+using System.Globalization;
 using Windows.Devices.Sensors;
 
 namespace SensorsConsole;
@@ -6,6 +7,12 @@ internal class Program
 {
     public static async Task Main()
     {
+        CultureInfo culture = new("en-US");
+        CultureInfo.DefaultThreadCurrentCulture = culture;
+        CultureInfo.DefaultThreadCurrentUICulture = culture;
+        Thread.CurrentThread.CurrentCulture = culture;
+        Thread.CurrentThread.CurrentUICulture = culture;
+
         var provider = new SensorProvider();
 
         foreach (var sensor in provider.Sensors)
