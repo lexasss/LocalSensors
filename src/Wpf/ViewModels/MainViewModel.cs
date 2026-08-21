@@ -1,8 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using Windows.Devices.Sensors;
-using SensorsWpf.Models;
 using SensorsWpf.Enums;
+using SensorsWpf.Models;
 using SensorsWpf.Services;
+using System.Windows;
+using System.Windows.Threading;
+using Windows.Devices.Sensors;
+using Windows.Foundation;
 
 namespace SensorsWpf.ViewModels;
 
@@ -32,204 +35,130 @@ public partial class MainViewModel : ObservableObject
 
     public MainViewModel(SensorProvider sensors)
     {
-        _sensors = sensors;
+        _dispatcher = Application.Current.Dispatcher;
 
-        _dataFactors = new() {
-            { BallDataSource.Accelerometer, 100 },
-            { BallDataSource.Gyrometer, 1 },
-            { BallDataSource.Inclinometer, 2 },
-            { BallDataSource.Orientation, 300 },
-            { BallDataSource.Magnetometer, 3 },
-        };
+        Register<ActivitySensor, ActivitySensorReadingChangedEventArgs>(Activity, sensors.Activity,
+            (s, h) => s.ReadingChanged += h,
+            r => $"{r.Reading.Activity}");
 
-        if (_sensors.Activity != null)
-        {
-            _sensors.Activity.ReadingChanged += Activity_ReadingChanged;
-            Activity.Status = true;
-        }
-        if (_sensors.Accelerometer != null)
-        {
-            _sensors.Accelerometer.ReadingChanged += Accelerometer_ReadingChanged;
-            Accelerometer.Status = true;
-        }
-        if (_sensors.Altimeter != null)
-        {
-            _sensors.Altimeter.ReadingChanged += Altimeter_ReadingChanged;
-            Altimeter.Status = true;
-        }
-        if (_sensors.Barometer != null)
-        {
-            _sensors.Barometer.ReadingChanged += Barometer_ReadingChanged;
-            Barometer.Status = true;
-        }
-        if (_sensors.Compass != null)
-        {
-            _sensors.Compass.ReadingChanged += Compass_ReadingChanged;
-            Compass.Status = true;
-        }
-        if (_sensors.Gyrometer != null)
-        {
-            _sensors.Gyrometer.ReadingChanged += Gyrometer_ReadingChanged;
-            Gyrometer.Status = true;
-        }
-        if (_sensors.HingeAngle != null)
-        {
-            _sensors.HingeAngle.ReadingChanged += HingeAngle_ReadingChanged;
-            HingeAngle.Status = true;
-        }
-        if (_sensors.HumanPresence != null)
-        {
-            _sensors.HumanPresence.ReadingChanged += HumanPresence_ReadingChanged;
-            HumanPresence.Status = true;
-        }
-        if (_sensors.Inclinometer != null)
-        {
-            _sensors.Inclinometer.ReadingChanged += Inclinometer_ReadingChanged;
-            Inclinometer.Status = true;
-        }
-        if (_sensors.Light != null)
-        {
-            _sensors.Light.ReadingChanged += Light_ReadingChanged;
-            Light.Status = true;
-        }
-        if (_sensors.Magnetometer != null)
-        {
-            _sensors.Magnetometer.ReadingChanged += Magnetometer_ReadingChanged;
-            Magnetometer.Status = true;
-        }
-        if (_sensors.Orientation != null)
-        {
-            _sensors.Orientation.ReadingChanged += Orientation_ReadingChanged;
-            Orientation.Status = true;
-        }
-        if (_sensors.Pedometer != null)
-        {
-            _sensors.Pedometer.ReadingChanged += Pedometer_ReadingChanged;
-            Pedometer.Status = true;
-        }
-        if (_sensors.Proximity != null)
-        {
-            _sensors.Proximity.ReadingChanged += Proximity_ReadingChanged;
-            Proximity.Status = true;
-        }
-        if (_sensors.SimpleOrientation != null)
-        {
-            _sensors.SimpleOrientation.OrientationChanged += SimpleOrientation_OrientationChanged;
-            SimpleOrientation.Status = true;
-        }
+        Register<Accelerometer, AccelerometerReadingChangedEventArgs>(Accelerometer, sensors.Accelerometer,
+            (s, h) => s.ReadingChanged += h,
+            r => $"X = {r.Reading.AccelerationX,6:F3} G, Y = {r.Reading.AccelerationY,6:F3} G, Z = {r.Reading.AccelerationZ,6:F3} G",
+            r => MoveBall(BallDataSource.Accelerometer, r.Reading.AccelerationX, r.Reading.AccelerationY));
+
+        Register<Altimeter, AltimeterReadingChangedEventArgs>(Altimeter, sensors.Altimeter,
+            (s, h) => s.ReadingChanged += h,
+            r => $"{r.Reading.AltitudeChangeInMeters:F3} m");
+
+        Register<Barometer, BarometerReadingChangedEventArgs>(Barometer, sensors.Barometer,
+            (s, h) => s.ReadingChanged += h,
+            r => $"{r.Reading.StationPressureInHectopascals:F3} hPa");
+
+        Register<Compass, CompassReadingChangedEventArgs>(Compass, sensors.Compass,
+            (s, h) => s.ReadingChanged += h,
+            r => $"{r.Reading.HeadingTrueNorth:F3}°");
+
+        Register<Gyrometer, GyrometerReadingChangedEventArgs>(Gyrometer, sensors.Gyrometer,
+            (s, h) => s.ReadingChanged += h,
+            r => $"X = {r.Reading.AngularVelocityX,7:F3}°/s, Y = {r.Reading.AngularVelocityY,7:F3}°/s, Z = {r.Reading.AngularVelocityZ,7:F3}°/s",
+            r => MoveBall(BallDataSource.Gyrometer, r.Reading.AngularVelocityY, r.Reading.AngularVelocityX));
+
+        Register<HingeAngleSensor, HingeAngleSensorReadingChangedEventArgs>(HingeAngle, sensors.HingeAngle,
+            (s, h) => s.ReadingChanged += h,
+            r => $"{r.Reading.AngleInDegrees:F3}°");
+
+        Register<HumanPresenceSensor, HumanPresenceSensorReadingChangedEventArgs>(HumanPresence, sensors.HumanPresence,
+            (s, h) => s.ReadingChanged += h,
+            r => $"{r.Reading.Engagement}: {r.Reading.Presence} at {r.Reading.DistanceInMillimeters} mm");
+
+        Register<Inclinometer, InclinometerReadingChangedEventArgs>(Inclinometer, sensors.Inclinometer,
+            (s, h) => s.ReadingChanged += h,
+            r => $"P = {r.Reading.PitchDegrees,7:F3}°, R = {r.Reading.RollDegrees,7:F3}°, Y = {r.Reading.YawDegrees,7:F3}°",
+            r => MoveBall(BallDataSource.Inclinometer, r.Reading.RollDegrees, r.Reading.PitchDegrees));
+
+        Register<LightSensor, LightSensorReadingChangedEventArgs>(Light, sensors.Light,
+            (s, h) => s.ReadingChanged += h,
+            r => $"{r.Reading.IlluminanceInLux:F3} lux");
+
+        Register<Magnetometer, MagnetometerReadingChangedEventArgs>(Magnetometer, sensors.Magnetometer,
+            (s, h) => s.ReadingChanged += h,
+            r => $"X = {r.Reading.MagneticFieldX,7:F3}, Y = {r.Reading.MagneticFieldY,7:F3}, Z = {r.Reading.MagneticFieldZ,7:F3}",
+            r => MoveBall(BallDataSource.Magnetometer, r.Reading.MagneticFieldX, r.Reading.MagneticFieldY));
+
+        Register<OrientationSensor, OrientationSensorReadingChangedEventArgs>(Orientation, sensors.Orientation,
+            (s, h) => s.ReadingChanged += h,
+            r => {
+                var q = r.Reading.Quaternion;
+                return $"W = {q.W,5:F3}, X = {q.X,5:F3}, Y = {q.Y,5:F3}, Z = {q.Z,5:F3}";
+            },
+            r => MoveBall(BallDataSource.Orientation, r.Reading.Quaternion.X, r.Reading.Quaternion.Y));
+
+        Register<Pedometer, PedometerReadingChangedEventArgs>(Pedometer, sensors.Pedometer,
+            (s, h) => s.ReadingChanged += h,
+            r => $"{r.Reading.CumulativeStepsDuration}: {r.Reading.CumulativeSteps} ({r.Reading.StepKind})");
+
+        Register<ProximitySensor, ProximitySensorReadingChangedEventArgs>(Proximity, sensors.Proximity,
+            (s, h) => s.ReadingChanged += h,
+            r => r.Reading.IsDetected ? $"{r.Reading.DistanceInMillimeters:F3} mm" : "-");
+
+        Register<SimpleOrientationSensor, SimpleOrientationSensorOrientationChangedEventArgs>(SimpleOrientation, sensors.SimpleOrientation,
+            (s, h) => s.OrientationChanged += h,
+            r => $"{r.Orientation}");
     }
 
     #region Internal
 
-    readonly Dictionary<BallDataSource, double> _dataFactors;
+    private readonly Dispatcher _dispatcher;
 
-    readonly SensorProvider _sensors;
+    private static readonly IReadOnlyDictionary<BallDataSource, double> Factors =
+        new Dictionary<BallDataSource, double>
+        {
+            [BallDataSource.Accelerometer] = 100,
+            [BallDataSource.Gyrometer] = 1,
+            [BallDataSource.Inclinometer] = 2,
+            [BallDataSource.Orientation] = 300,
+            [BallDataSource.Magnetometer] = 3,
+        };
 
-    private void MoveBall(double x, double y, BallDataSource dataSource)
+    private void Register<TSensor, TArgs>(
+        SensorData data,
+        TSensor? sensor,
+        Action<TSensor, TypedEventHandler<TSensor, TArgs>> subscribe,
+        Func<TArgs, string> format,
+        Action<TArgs>? moveBall = null)
+        where TSensor : class
     {
-        var factor = _dataFactors[dataSource];
-        Ball.X = factor * x;
-        Ball.Y = factor * -y;
+        if (sensor is null)
+            return;
+
+        TypedEventHandler<TSensor, TArgs> handler = (_, args) =>
+        {
+            string info = format(args);
+            RunOnUiThread(() =>
+            {
+                data.Info = info;
+                moveBall?.Invoke(args);
+            });
+        };
+
+        subscribe(sensor, handler);
+        data.Status = true;
     }
 
-    private void SimpleOrientation_OrientationChanged(SimpleOrientationSensor sender, SimpleOrientationSensorOrientationChangedEventArgs args)
+    private void RunOnUiThread(Action action)
     {
-        var data = args.Orientation;
-        SimpleOrientation.Info = $"{data}";
+        if (_dispatcher.CheckAccess())
+            action();
+        else
+            _dispatcher.BeginInvoke(action);
     }
 
-    private void Activity_ReadingChanged(ActivitySensor sender, ActivitySensorReadingChangedEventArgs args)
+    private void MoveBall(BallDataSource source, double x, double y)
     {
-        var data = args.Reading;
-        Activity.Info = $"{data.Activity}";
-    }
+        if (BallDataSource != source)
+            return;
 
-    private void Compass_ReadingChanged(Compass sender, CompassReadingChangedEventArgs args)
-    {
-        var data = args.Reading;
-        Compass.Info = data.HeadingTrueNorth != null ? $"{data.HeadingTrueNorth:F3}°" : "-";
-    }
-
-    private void HingeAngle_ReadingChanged(HingeAngleSensor sender, HingeAngleSensorReadingChangedEventArgs args)
-    {
-        var data = args.Reading;
-        HingeAngle.Info = $"{data.AngleInDegrees:F3}°";
-    }
-
-    private void Accelerometer_ReadingChanged(Accelerometer sender, AccelerometerReadingChangedEventArgs args)
-    {
-        var data = args.Reading;
-        Accelerometer.Info = $"X = {data.AccelerationX,6:F3} G, Y = {data.AccelerationY,6:F3} G, Z = {data.AccelerationZ,6:F3} G";
-        if (BallDataSource == BallDataSource.Accelerometer)
-            MoveBall(data.AccelerationX, data.AccelerationY, BallDataSource.Accelerometer);
-    }
-
-    private void Gyrometer_ReadingChanged(Gyrometer sender, GyrometerReadingChangedEventArgs args)
-    {
-        var data = args.Reading;
-        Gyrometer.Info = $"X = {data.AngularVelocityX,7:F3}°/s, Y = {data.AngularVelocityY,7:F3}°/s, Z = {data.AngularVelocityZ,7:F3}°/s";
-        if (BallDataSource == BallDataSource.Gyrometer)
-            MoveBall(data.AngularVelocityY, data.AngularVelocityX, BallDataSource.Gyrometer);
-    }
-
-    private void Inclinometer_ReadingChanged(Inclinometer sender, InclinometerReadingChangedEventArgs args)
-    {
-        var data = args.Reading;
-        Inclinometer.Info = $"P = {data.PitchDegrees,7:F3}°, R = {data.RollDegrees,7:F3}°, Y = {data.YawDegrees,7:F3}°";
-        if (BallDataSource == BallDataSource.Inclinometer)
-            MoveBall(data.RollDegrees, data.PitchDegrees, BallDataSource.Inclinometer);
-    }
-
-    private void Orientation_ReadingChanged(OrientationSensor sender, OrientationSensorReadingChangedEventArgs args)
-    {
-        var data = args.Reading;
-        Orientation.Info = $"W = {data.Quaternion.W,5:F3}, X = {data.Quaternion.X,5:F3}, Y = {data.Quaternion.Y,5:F3}, Z = {data.Quaternion.Z,5:F3}";
-        if (BallDataSource == BallDataSource.Orientation)
-            MoveBall(data.Quaternion.X, data.Quaternion.Y, BallDataSource.Orientation);
-    }
-
-    private void Magnetometer_ReadingChanged(Magnetometer sender, MagnetometerReadingChangedEventArgs args)
-    {
-        var data = args.Reading;
-        Magnetometer.Info = $"X = {data.MagneticFieldX,7:F3}, Y = {data.MagneticFieldY,7:F3}, Z = {data.MagneticFieldZ,7:F3}";
-        if (BallDataSource == BallDataSource.Magnetometer)
-            MoveBall(data.MagneticFieldX, data.MagneticFieldY, BallDataSource.Magnetometer);
-    }
-
-    private void Pedometer_ReadingChanged(Pedometer sender, PedometerReadingChangedEventArgs args)
-    {
-        var data = args.Reading;
-        Pedometer.Info = $"{data.CumulativeStepsDuration}: {data.CumulativeSteps} ({data.StepKind})";
-    }
-
-    private void HumanPresence_ReadingChanged(HumanPresenceSensor sender, HumanPresenceSensorReadingChangedEventArgs args)
-    {
-        var data = args.Reading;
-        HumanPresence.Info = $"{data.Engagement}: {data.Presence} at {data.DistanceInMillimeters} mm";
-    }
-
-    private void Altimeter_ReadingChanged(Altimeter sender, AltimeterReadingChangedEventArgs args)
-    {
-        var data = args.Reading;
-        Altimeter.Info = $"{data.AltitudeChangeInMeters:F3} m";
-    }
-
-    private void Barometer_ReadingChanged(Barometer sender, BarometerReadingChangedEventArgs args)
-    {
-        var data = args.Reading;
-        Barometer.Info = $"{data.StationPressureInHectopascals:F3} hPa";
-    }
-
-    private void Light_ReadingChanged(LightSensor sender, LightSensorReadingChangedEventArgs args)
-    {
-        var data = args.Reading;
-        Light.Info = $"{data.IlluminanceInLux:F3} lux";
-    }
-
-    private void Proximity_ReadingChanged(ProximitySensor sender, ProximitySensorReadingChangedEventArgs args)
-    {
-        var data = args.Reading;
-        Proximity.Info = data.IsDetected ? $"{data.DistanceInMillimeters:F3} mm" : "-";
+        Ball.MoveTo(Factors[source] * x, Factors[source] * -y);
     }
 
     #endregion

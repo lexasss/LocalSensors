@@ -2,10 +2,23 @@
 
 namespace SensorsWpf.Models;
 
-public partial class BallPosition(double x = 0, double y = 0) : ObservableObject
+public class BallPosition(double x = 0, double y = 0) : ObservableObject
 {
-    [ObservableProperty]
-    public partial double X { get; set; } = x;
-    [ObservableProperty]
-    public partial double Y { get; set; } = y;
+    public double X => _x;
+    public double Y => _y;
+
+    public void MoveTo(double x, double y)
+    {
+        _x = x;
+        _y = y;
+        OnPropertyChanged(nameof(X));
+        OnPropertyChanged(nameof(Y));
+    }
+
+    #region Internal
+
+    private double _x = x;
+    private double _y = y;
+
+    #endregion
 }
