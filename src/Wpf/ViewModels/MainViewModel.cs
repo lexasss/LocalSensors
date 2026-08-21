@@ -24,7 +24,7 @@ public partial class MainViewModel : ObservableObject
     public SensorData Proximity { get; } = new("Proximity");
     public SensorData SimpleOrientation { get; } = new("Mode");
 
-    public Point Ball { get; } = new Point();
+    public BallPosition Ball { get; } = new BallPosition();
     public double BallSize { get; } = 10;
 
     [ObservableProperty]
@@ -35,11 +35,11 @@ public partial class MainViewModel : ObservableObject
         _sensors = sensors;
 
         _dataFactors = new() {
-            { Accelerometer.Name, 100 },
-            { Gyrometer.Name, 1 },
-            { Inclinometer.Name, 2 },
-            { Orientation.Name, 300 },
-            { Magnetometer.Name, 3 },
+            { BallDataSource.Accelerometer, 100 },
+            { BallDataSource.Gyrometer, 1 },
+            { BallDataSource.Inclinometer, 2 },
+            { BallDataSource.Orientation, 300 },
+            { BallDataSource.Magnetometer, 3 },
         };
 
         if (_sensors.Activity != null)
@@ -121,12 +121,13 @@ public partial class MainViewModel : ObservableObject
 
     #region Internal
 
-    readonly Dictionary<string, double> _dataFactors;
+    readonly Dictionary<BallDataSource, double> _dataFactors;
 
     readonly SensorProvider _sensors;
 
-    private void MoveBall(double x, double y, double factor)
+    private void MoveBall(double x, double y, BallDataSource dataSource)
     {
+        var factor = _dataFactors[dataSource];
         Ball.X = factor * x;
         Ball.Y = factor * -y;
     }
@@ -160,7 +161,7 @@ public partial class MainViewModel : ObservableObject
         var data = args.Reading;
         Accelerometer.Info = $"X = {data.AccelerationX,6:F3} G, Y = {data.AccelerationY,6:F3} G, Z = {data.AccelerationZ,6:F3} G";
         if (BallDataSource == BallDataSource.Accelerometer)
-            MoveBall(data.AccelerationX, data.AccelerationY, _dataFactors["Accelerometer"]);
+            MoveBall(data.AccelerationX, data.AccelerationY, BallDataSource.Accelerometer);
     }
 
     private void Gyrometer_ReadingChanged(Gyrometer sender, GyrometerReadingChangedEventArgs args)
@@ -168,7 +169,7 @@ public partial class MainViewModel : ObservableObject
         var data = args.Reading;
         Gyrometer.Info = $"X = {data.AngularVelocityX,7:F3}°/s, Y = {data.AngularVelocityY,7:F3}°/s, Z = {data.AngularVelocityZ,7:F3}°/s";
         if (BallDataSource == BallDataSource.Gyrometer)
-            MoveBall(data.AngularVelocityY, data.AngularVelocityX, _dataFactors[Gyrometer.Name]);
+            MoveBall(data.AngularVelocityY, data.AngularVelocityX, BallDataSource.Gyrometer);
     }
 
     private void Inclinometer_ReadingChanged(Inclinometer sender, InclinometerReadingChangedEventArgs args)
@@ -176,7 +177,7 @@ public partial class MainViewModel : ObservableObject
         var data = args.Reading;
         Inclinometer.Info = $"P = {data.PitchDegrees,7:F3}°, R = {data.RollDegrees,7:F3}°, Y = {data.YawDegrees,7:F3}°";
         if (BallDataSource == BallDataSource.Inclinometer)
-            MoveBall(data.RollDegrees, data.PitchDegrees, _dataFactors[Inclinometer.Name]);
+            MoveBall(data.RollDegrees, data.PitchDegrees, BallDataSource.Inclinometer);
     }
 
     private void Orientation_ReadingChanged(OrientationSensor sender, OrientationSensorReadingChangedEventArgs args)
@@ -184,7 +185,7 @@ public partial class MainViewModel : ObservableObject
         var data = args.Reading;
         Orientation.Info = $"W = {data.Quaternion.W,5:F3}, X = {data.Quaternion.X,5:F3}, Y = {data.Quaternion.Y,5:F3}, Z = {data.Quaternion.Z,5:F3}";
         if (BallDataSource == BallDataSource.Orientation)
-            MoveBall(data.Quaternion.X, data.Quaternion.Y, _dataFactors[Orientation.Name]);
+            MoveBall(data.Quaternion.X, data.Quaternion.Y, BallDataSource.Orientation);
     }
 
     private void Magnetometer_ReadingChanged(Magnetometer sender, MagnetometerReadingChangedEventArgs args)
@@ -192,7 +193,7 @@ public partial class MainViewModel : ObservableObject
         var data = args.Reading;
         Magnetometer.Info = $"X = {data.MagneticFieldX,7:F3}, Y = {data.MagneticFieldY,7:F3}, Z = {data.MagneticFieldZ,7:F3}";
         if (BallDataSource == BallDataSource.Magnetometer)
-            MoveBall(data.MagneticFieldX, data.MagneticFieldY, _dataFactors[Magnetometer.Name]);
+            MoveBall(data.MagneticFieldX, data.MagneticFieldY, BallDataSource.Magnetometer);
     }
 
     private void Pedometer_ReadingChanged(Pedometer sender, PedometerReadingChangedEventArgs args)

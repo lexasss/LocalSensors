@@ -10,5 +10,5 @@ internal class StatusToBrushConverter : IValueConverter
         (bool)value ? Brushes.DarkGreen : Brushes.Red;
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
-        ((Brush)value) == Brushes.DarkGreen;
+        Binding.DoNothing;
 }

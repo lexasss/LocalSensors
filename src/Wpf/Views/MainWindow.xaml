@@ -17,9 +17,7 @@
         Icon="/Assets/Images/icon.png">
     <Window.Resources>
         <conv:StatusToBrushConverter x:Key="statusToBrush"/>
-        <conv:AbsoluteToRelativeXConverter x:Key="absToRelX"/>
-        <conv:AbsoluteToRelativeYConverter x:Key="absToRelY"/>
-        <conv:BallDataSourceConverter x:Key="ballDatgaSource"/>
+        <conv:BallDataSourceConverter x:Key="ballDataSource"/>
 
         <DataTemplate x:Key="Sensor" DataType="models:SensorData">
             <StackPanel>
@@ -96,27 +94,27 @@
                              Content="{Binding Accelerometer}"/>
                 <RadioButton GroupName="Ball" Grid.Column="1" Grid.Row="0"
                              IsEnabled="{Binding Accelerometer.Status}"
-                             IsChecked="{Binding BallDataSource, Converter={StaticResource ballDatgaSource}, ConverterParameter={x:Static enums:BallDataSource.Accelerometer}}"/>
+                             IsChecked="{Binding BallDataSource, Converter={StaticResource ballDataSource}, ConverterParameter={x:Static enums:BallDataSource.Accelerometer}}"/>
                 <UserControl ContentTemplate="{StaticResource Sensor}" Grid.Column="0" Grid.Row="1"
                              Content="{Binding Gyrometer}"/>
                 <RadioButton GroupName="Ball" Grid.Column="1" Grid.Row="1"
                              IsEnabled="{Binding Gyrometer.Status}"
-                             IsChecked="{Binding BallDataSource, Converter={StaticResource ballDatgaSource}, ConverterParameter={x:Static enums:BallDataSource.Gyrometer}}"/>
+                             IsChecked="{Binding BallDataSource, Converter={StaticResource ballDataSource}, ConverterParameter={x:Static enums:BallDataSource.Gyrometer}}"/>
                 <UserControl ContentTemplate="{StaticResource Sensor}" Grid.Column="0" Grid.Row="2" 
                              Content="{Binding Inclinometer}"/>
                 <RadioButton GroupName="Ball" Grid.Column="1" Grid.Row="2"
                              IsEnabled="{Binding Inclinometer.Status}"
-                             IsChecked="{Binding BallDataSource, Converter={StaticResource ballDatgaSource}, ConverterParameter={x:Static enums:BallDataSource.Inclinometer}}"/>
+                             IsChecked="{Binding BallDataSource, Converter={StaticResource ballDataSource}, ConverterParameter={x:Static enums:BallDataSource.Inclinometer}}"/>
                 <UserControl ContentTemplate="{StaticResource Sensor}" Grid.Column="0" Grid.Row="3"
                              Content="{Binding Orientation}"/>
                 <RadioButton GroupName="Ball" Grid.Column="1" Grid.Row="3"
                              IsEnabled="{Binding Orientation.Status}"
-                             IsChecked="{Binding BallDataSource, Converter={StaticResource ballDatgaSource}, ConverterParameter={x:Static enums:BallDataSource.Orientation}}"/>
+                             IsChecked="{Binding BallDataSource, Converter={StaticResource ballDataSource}, ConverterParameter={x:Static enums:BallDataSource.Orientation}}"/>
                 <UserControl ContentTemplate="{StaticResource Sensor}" Grid.Column="0" Grid.Row="4" 
                              Content="{Binding Magnetometer}"/>
                 <RadioButton GroupName="Ball" Grid.Column="1" Grid.Row="4"
                              IsEnabled="{Binding Magnetometer.Status}"
-                             IsChecked="{Binding BallDataSource, Converter={StaticResource ballDatgaSource}, ConverterParameter={x:Static enums:BallDataSource.Magnetometer}}"/>
+                             IsChecked="{Binding BallDataSource, Converter={StaticResource ballDataSource}, ConverterParameter={x:Static enums:BallDataSource.Magnetometer}}"/>
                 <UserControl ContentTemplate="{StaticResource Sensor}" Grid.Column="0" Grid.Row="5"
                              Content="{Binding Pedometer}"/>
                 <Separator Grid.Column="1" Grid.Row="5"/>
