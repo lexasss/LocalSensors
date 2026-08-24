@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.Options;
 using SensorsWpf.Enums;
 using SensorsWpf.Models;
 using SensorsWpf.Services;
@@ -30,12 +31,17 @@ public partial class MainViewModel : ObservableObject
     public BallPosition Ball { get; } = new BallPosition();
     public double BallSize { get; } = 10;
 
-    [ObservableProperty]
-    public partial BallDataSource BallDataSource { get; set; } = BallDataSource.Accelerometer;
+    public BallDataSource BallDataSource
+    {
+        get => _settings.DataSource;
+        set => _settings.DataSource = value;
+    }
 
-    public MainViewModel(SensorProvider sensors)
+    public MainViewModel(SensorProvider sensors, IOptions<MainSettings> settings)
     {
         _dispatcher = Application.Current.Dispatcher;
+
+        _settings = settings.Value ?? new MainSettings();
 
         Register<ActivitySensor, ActivitySensorReadingChangedEventArgs>(Activity, sensors.Activity,
             (s, h) => s.ReadingChanged += h,
@@ -106,9 +112,15 @@ public partial class MainViewModel : ObservableObject
             r => $"{r.Orientation}");
     }
 
+    public void SaveSettings(Action<MainSettings> provider)
+    {
+        provider(_settings);
+    }
+
     #region Internal
 
     private readonly Dispatcher _dispatcher;
+    private readonly MainSettings _settings;
 
     private static readonly Dictionary<BallDataSource, double> Factors = new()
         {
