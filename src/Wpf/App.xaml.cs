@@ -1,11 +1,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SensorsWpf.Models;
 using SensorsWpf.Services;
 using SensorsWpf.ViewModels;
 using SensorsWpf.Views;
 using System.Globalization;
-using System.Text.Json;
 using System.Windows;
 
 namespace SensorsWpf;
@@ -22,9 +22,6 @@ public partial class App : Application
     }
 
     #region Internal
-
-    const string CONFIG_FILENAME = "appSettings.json";
-    const string CONFIG_SECTION_MAIN = "Main";
 
     IHost? _host;
 
@@ -48,7 +45,9 @@ public partial class App : Application
     {
         if (_host is not null)
         {
-            SaveConfiguration();
+            _host.Services
+                .GetRequiredService<UserSettingsProvider>()
+                .Save();
 
             await _host.StopAsync();
             _host.Dispose();
@@ -59,24 +58,14 @@ public partial class App : Application
 
     private static void ConfigureServices(IServiceCollection services, ConfigurationManager config)
     {
-        services.Configure<Models.MainSettings>(config.GetSection(CONFIG_SECTION_MAIN));
+        services.Configure<AppSettings>(config);
 
+        services.AddSingleton<UserSettingsProvider>();
         services.AddSingleton<SensorProvider>();
         services.AddSingleton<MainViewModel>();
         services.AddSingleton<MainWindow>();
-    }
 
-    private void SaveConfiguration()
-    {
-        Dictionary<string, object> configSections = [];
-
-        _host?.Services.GetRequiredService<MainViewModel>().SaveSettings(settings =>
-            configSections[CONFIG_SECTION_MAIN] = settings
-        );
-
-        var json = JsonSerializer.Serialize(configSections, new JsonSerializerOptions { WriteIndented = true });
-
-        System.IO.File.WriteAllText(CONFIG_FILENAME, json);
+        services.AddSingleton(sp => sp.GetRequiredService<UserSettingsProvider>().Settings);
     }
 
     #endregion

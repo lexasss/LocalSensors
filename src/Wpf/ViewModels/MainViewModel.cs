@@ -4,6 +4,7 @@ using SensorsWpf.Enums;
 using SensorsWpf.Models;
 using SensorsWpf.Services;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Threading;
 using Windows.Devices.Sensors;
 using Windows.Foundation;
@@ -30,6 +31,7 @@ public partial class MainViewModel : ObservableObject
 
     public BallPosition Ball { get; } = new BallPosition();
     public double BallSize { get; } = 10;
+    public Brush BallBrush { get; }
 
     public BallDataSource BallDataSource
     {
@@ -37,11 +39,12 @@ public partial class MainViewModel : ObservableObject
         set => _settings.DataSource = value;
     }
 
-    public MainViewModel(SensorProvider sensors, IOptions<MainSettings> settings)
+    public MainViewModel(SensorProvider sensors, UserSettings userSettings, IOptions<AppSettings> appSettings)
     {
         _dispatcher = Application.Current.Dispatcher;
+        _settings = userSettings;
 
-        _settings = settings.Value ?? new MainSettings();
+        BallBrush = appSettings.Value.BallBrush;
 
         Register<ActivitySensor, ActivitySensorReadingChangedEventArgs>(Activity, sensors.Activity,
             (s, h) => s.ReadingChanged += h,
@@ -112,17 +115,12 @@ public partial class MainViewModel : ObservableObject
             r => $"{r.Orientation}");
     }
 
-    public void SaveSettings(Action<MainSettings> provider)
-    {
-        provider(_settings);
-    }
-
     #region Internal
 
-    private readonly Dispatcher _dispatcher;
-    private readonly MainSettings _settings;
+    readonly Dispatcher _dispatcher;
+    readonly UserSettings _settings;
 
-    private static readonly Dictionary<BallDataSource, double> Factors = new()
+    readonly Dictionary<BallDataSource, double> _factors = new()
         {
             [BallDataSource.Accelerometer] = 100,
             [BallDataSource.Gyrometer] = 1,
@@ -169,7 +167,7 @@ public partial class MainViewModel : ObservableObject
         if (BallDataSource != source)
             return;
 
-        Ball.MoveTo(Factors[source] * x, Factors[source] * -y);
+        Ball.MoveTo(_factors[source] * x, _factors[source] * -y);
     }
 
     #endregion
